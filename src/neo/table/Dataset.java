@@ -83,6 +83,7 @@ public class Dataset implements Serializable {
     private Date time;
 
     public Dataset() {
+        time = new Date();
     }
 
     public Dataset(Integer id) {

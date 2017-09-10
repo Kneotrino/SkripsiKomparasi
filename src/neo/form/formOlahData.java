@@ -10,8 +10,10 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import java.awt.EventQueue;
 import java.beans.Beans;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,6 +50,7 @@ public class formOlahData extends JPanel {
         entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU").createEntityManager();
         query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT d FROM Dataset d");
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
+        jFileChooser1 = new javax.swing.JFileChooser();
         masterScrollPane = new javax.swing.JScrollPane();
         masterTable = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
@@ -59,6 +62,9 @@ public class formOlahData extends JPanel {
         refreshButton1 = new javax.swing.JButton();
 
         FormListener formListener = new FormListener();
+
+        jFileChooser1.setApproveButtonText("IMPORT");
+        jFileChooser1.setDialogTitle("IMPORT DATASET TENAGA KERJA");
 
         setLayout(new java.awt.BorderLayout());
 
@@ -226,19 +232,28 @@ public class formOlahData extends JPanel {
 
     private void refreshButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButton1ActionPerformed
         try {
-            com.opencsv.CSVReader reader = new CSVReader(new FileReader("E:\\SKIRPSI\\DATASET\\dataset3.csv"), ',');
-             	HeaderColumnNameMappingStrategy<Dataset> beanStrategy = new HeaderColumnNameMappingStrategy<>();
-	beanStrategy.setType(Dataset.class);	
-	CsvToBean<Dataset> csvToBean = new CsvToBean<>();
-	List<Dataset> temps = csvToBean.parse(beanStrategy, reader);	
-              temps.forEach((temp) -> {
-                    entityManager.persist(temp);
-              });
-              list.addAll(temps);
-              int size = temps.size();
-              javax.swing.JOptionPane.showMessageDialog(masterScrollPane, size + " Data di import");
-            // TODO add your handling code here:
+            int showOpenDialog = jFileChooser1.showOpenDialog(jPanel1);
+            System.out.println("showOpenDialog = " + showOpenDialog);
+            if (showOpenDialog == javax.swing.JFileChooser.APPROVE_OPTION) {
+                File selectedFile = jFileChooser1.getSelectedFile();
+                System.out.println("selectedFile = " + selectedFile);
+                FileReader fileReader = new FileReader(selectedFile);
+                com.opencsv.CSVReader reader = new CSVReader(fileReader);
+                HeaderColumnNameMappingStrategy<Dataset> beanStrategy = new HeaderColumnNameMappingStrategy<>();
+                beanStrategy.setType(Dataset.class);	
+                CsvToBean<Dataset> csvToBean = new CsvToBean<>();
+                List<Dataset> temps = csvToBean.parse(beanStrategy, reader);	
+                temps.forEach((temp) -> {
+                        entityManager.persist(temp);
+                });
+                list.addAll(temps);
+                int size = temps.size();
+                javax.swing.JOptionPane.showMessageDialog(masterScrollPane, size + " Data di import");
+                
+            }
         } catch (FileNotFoundException ex) {
+            Logger.getLogger(formOlahData.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(formOlahData.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_refreshButton1ActionPerformed
@@ -248,6 +263,7 @@ public class formOlahData extends JPanel {
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton deleteButton1;
     private javax.persistence.EntityManager entityManager;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JPanel jPanel1;
     private java.util.List<neo.table.Dataset> list;
     private javax.swing.JScrollPane masterScrollPane;

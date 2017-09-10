@@ -5,6 +5,8 @@
  */
 package neo.form;
 
+import java.awt.CardLayout;
+
 /**
  *
  * @author SEED
@@ -37,10 +39,18 @@ public class mainForm extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        formOlahData1 = new neo.form.formOlahData();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
         jButton1.setText("MAIN");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButton1);
 
         jButton2.setText("  ");
@@ -60,19 +70,20 @@ public class mainForm extends javax.swing.JFrame {
         });
         jPanel3.add(jButton3);
 
-        jButton4.setText("jButton1");
+        jButton4.setText("PEMBELAJARAN (LEARNING)");
         jPanel3.add(jButton4);
 
-        jButton5.setText("jButton1");
+        jButton5.setText("ANALISIS DATASET (ANYLIZE DATASET)");
         jPanel3.add(jButton5);
 
-        jButton6.setText("jButton1");
+        jButton6.setText("KOMPARASI (COMPARATION)");
         jPanel3.add(jButton6);
 
-        jButton7.setText("jButton1");
+        jButton7.setText("KELUAR (EXIT)");
         jPanel3.add(jButton7);
 
         jPanel2.add(jPanel3, "card2");
+        jPanel2.add(formOlahData1, "card3");
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -80,8 +91,16 @@ public class mainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        this.jButton2.setText("INPUT DATA");
+        CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
+        cardLayout.show(jPanel2, "card3");        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        this.jButton2.setText("  ");
+        CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
+        cardLayout.show(jPanel2, "card2");        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -119,6 +138,7 @@ public class mainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private neo.form.formOlahData formOlahData1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

@@ -18,6 +18,7 @@ public class AnalisiKomparasi {
     public static void main(String[] args) {
         // Main class
         System.out.println("analisikomparasi.AnalisiKomparasi.main()");
+        neo.form.mainForm.main(args);
     }
     
 }
