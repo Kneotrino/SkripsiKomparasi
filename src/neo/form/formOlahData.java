@@ -15,6 +15,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +37,7 @@ public class formOlahData extends JPanel {
         if (!Beans.isDesignTime()) {
             entityManager.getTransaction().begin();
         }
+        refreshButtonActionPerformed(null);
     }
 
     /**
@@ -48,7 +51,7 @@ public class formOlahData extends JPanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU").createEntityManager();
-        query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT d FROM Dataset d");
+        query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT d FROM Dataset d ORDER BY d.id").setMaxResults(100);
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
         jFileChooser1 = new javax.swing.JFileChooser();
         masterScrollPane = new javax.swing.JScrollPane();
@@ -60,6 +63,13 @@ public class formOlahData extends JPanel {
         saveButton = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
         refreshButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        newButton1 = new javax.swing.JButton();
+        newButton2 = new javax.swing.JButton();
+        newButton5 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        newButton3 = new javax.swing.JButton();
+        newButton4 = new javax.swing.JButton();
 
         FormListener formListener = new FormListener();
 
@@ -71,6 +81,7 @@ public class formOlahData extends JPanel {
         masterTable.setDefaultEditor(String.class, new TablePopupEditor());
         masterTable.setDefaultEditor(Double.class, new TablePopupEditor());
         masterTable.setDefaultEditor(Integer.class, new TablePopupEditor());
+        masterTable.setAutoCreateRowSorter(true);
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
@@ -143,6 +154,31 @@ public class formOlahData extends JPanel {
 
         add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
+        newButton1.setText("AWAL");
+        newButton1.addActionListener(formListener);
+        jPanel2.add(newButton1);
+
+        newButton2.setText("SEBELUMNYA");
+        newButton2.addActionListener(formListener);
+        jPanel2.add(newButton2);
+
+        newButton5.setText("GO TO");
+        newButton5.addActionListener(formListener);
+        jPanel2.add(newButton5);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel2.add(jComboBox1);
+
+        newButton3.setText("SELANJUTNYA");
+        newButton3.addActionListener(formListener);
+        jPanel2.add(newButton3);
+
+        newButton4.setText("AKHIR");
+        newButton4.addActionListener(formListener);
+        jPanel2.add(newButton4);
+
+        add(jPanel2, java.awt.BorderLayout.SOUTH);
+
         bindingGroup.bind();
     }
 
@@ -151,13 +187,7 @@ public class formOlahData extends JPanel {
     private class FormListener implements java.awt.event.ActionListener {
         FormListener() {}
         public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == saveButton) {
-                formOlahData.this.saveButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == refreshButton) {
-                formOlahData.this.refreshButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == newButton) {
+            if (evt.getSource() == newButton) {
                 formOlahData.this.newButtonActionPerformed(evt);
             }
             else if (evt.getSource() == deleteButton) {
@@ -166,14 +196,35 @@ public class formOlahData extends JPanel {
             else if (evt.getSource() == deleteButton1) {
                 formOlahData.this.deleteButton1ActionPerformed(evt);
             }
+            else if (evt.getSource() == saveButton) {
+                formOlahData.this.saveButtonActionPerformed(evt);
+            }
+            else if (evt.getSource() == refreshButton) {
+                formOlahData.this.refreshButtonActionPerformed(evt);
+            }
             else if (evt.getSource() == refreshButton1) {
                 formOlahData.this.refreshButton1ActionPerformed(evt);
+            }
+            else if (evt.getSource() == newButton1) {
+                formOlahData.this.newButton1ActionPerformed(evt);
+            }
+            else if (evt.getSource() == newButton2) {
+                formOlahData.this.newButton2ActionPerformed(evt);
+            }
+            else if (evt.getSource() == newButton3) {
+                formOlahData.this.newButton3ActionPerformed(evt);
+            }
+            else if (evt.getSource() == newButton4) {
+                formOlahData.this.newButton4ActionPerformed(evt);
+            }
+            else if (evt.getSource() == newButton5) {
+                formOlahData.this.newButton5ActionPerformed(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
 
     
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "empty-statement"})
     private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
         entityManager.getTransaction().rollback();
         entityManager.getTransaction().begin();
@@ -183,6 +234,22 @@ public class formOlahData extends JPanel {
         }
         list.clear();
         list.addAll(data);
+
+        Query createQuery = entityManager.createQuery("SELECT COUNT(d) FROM Dataset d");
+        long get = (long) createQuery.getResultList().get(0);
+        System.out.println("get = " + get);
+        int max = (int) get;
+        int clunkSize = max / 100;
+        System.out.println("clunkSize = " + clunkSize);
+        String[] arr = new String[clunkSize];
+        for (int i = 0; i < clunkSize; i++) {
+                    arr[i] = "Ke-"+(i+1);
+                }
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(arr));
+        jComboBox1.setSelectedIndex(temp);
+
+//        int size = list.size();
+
     }//GEN-LAST:event_refreshButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -258,17 +325,90 @@ public class formOlahData extends JPanel {
         }
     }//GEN-LAST:event_refreshButton1ActionPerformed
 
+    private void newButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButton1ActionPerformed
+        temp = 0;
+        query.setFirstResult(0);
+        query.setMaxResults(100);                    
+        refreshButtonActionPerformed(evt);        
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newButton1ActionPerformed
+    int temp = 0;
+    private void newButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButton2ActionPerformed
+        if (temp > 0) {
+            temp--;            
+            int x = temp * 100;            
+            int y = (temp+1) * 100;
+            query.setFirstResult(x);
+            query.setMaxResults(y);            
+        }
+        else {
+            query.setFirstResult(0);
+            query.setMaxResults(100);                    
+        }
+        System.out.println("temp = " + temp);
+        refreshButtonActionPerformed(evt);        
+    }//GEN-LAST:event_newButton2ActionPerformed
+
+    private void newButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButton3ActionPerformed
+        temp++;            
+        int x = temp * 100;
+        System.out.println("temp = " + temp);
+        int y = temp * 100;
+        query.setFirstResult(x);
+        query.setMaxResults(y);
+        refreshButtonActionPerformed(evt);
+        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newButton3ActionPerformed
+
+    private void newButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButton4ActionPerformed
+        Query createQuery = entityManager.createQuery("SELECT COUNT(d) FROM Dataset d");
+        long get = (long) createQuery.getResultList().get(0);
+        System.out.println("get = " + get);
+        int max = (int) get;
+        temp = max / 100;
+        System.out.println("temp = " + temp);
+        query.setFirstResult(max-100);
+        query.setMaxResults(max);                    
+        refreshButtonActionPerformed(evt);        
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newButton4ActionPerformed
+
+    private void newButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButton5ActionPerformed
+        int selectedIndex = jComboBox1.getSelectedIndex();
+        temp = selectedIndex;
+        System.out.println("selectedIndex = " + selectedIndex);
+        int x = temp * 100;
+        System.out.println("temp = " + temp);
+        int y = 100;
+        if (temp > 0 ) {
+            y = temp * 100;
+        }
+        query.setFirstResult(x);
+        query.setMaxResults(y);
+        refreshButtonActionPerformed(evt);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newButton5ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.swing.JButton deleteButton1;
     private javax.persistence.EntityManager entityManager;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private java.util.List<neo.table.Dataset> list;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JButton newButton;
+    private javax.swing.JButton newButton1;
+    private javax.swing.JButton newButton2;
+    private javax.swing.JButton newButton3;
+    private javax.swing.JButton newButton4;
+    private javax.swing.JButton newButton5;
     private javax.persistence.Query query;
     private javax.swing.JButton refreshButton;
     private javax.swing.JButton refreshButton1;

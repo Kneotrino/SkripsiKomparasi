@@ -58,11 +58,7 @@ public class NewEmptyJUnitTest {
          System.out.println("NewEmptyJUnitTest.hello()");
         try {
             
-            com.opencsv.CSVReader reader = new CSVReader(new FileReader("E:\\SKIRPSI\\DATASET\\dataset3.csv"), ',');
-//             List<String[]> readAll = reader.readAll();
-//             for (String[] strings : readAll) {
-//                 System.out.println("strings = " + Arrays.toString(strings));
-//            }
+              com.opencsv.CSVReader reader = new CSVReader(new FileReader("E:\\SKIRPSI\\DATASET\\dataset3.csv"), ',');
              	HeaderColumnNameMappingStrategy<Dataset> beanStrategy = new HeaderColumnNameMappingStrategy<>();
 	beanStrategy.setType(Dataset.class);	
 	CsvToBean<Dataset> csvToBean = new CsvToBean<>();
