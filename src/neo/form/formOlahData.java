@@ -37,9 +37,18 @@ public class formOlahData extends JPanel {
         if (!Beans.isDesignTime()) {
             entityManager.getTransaction().begin();
         }
+//        refreshButtonActionPerformed(null);
+    }
+    public void reset()
+    {
         refreshButtonActionPerformed(null);
     }
-
+    public List<Dataset> getDataAll()
+    {
+        Query q = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT d FROM Dataset d ORDER BY d.id");
+        List<Dataset> dataAll = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(q.getResultList());                 
+        return dataAll;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

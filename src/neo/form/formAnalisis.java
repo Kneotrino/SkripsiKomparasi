@@ -47,10 +47,10 @@ public class formAnalisis extends javax.swing.JPanel {
 //             list1.add(stat);
 //             testData.forEach((v) -> stat.addValue(v));           
     }    
-
-    public formAnalisis(List<Dataset> data) {
-        initComponents();
-        initTable(data);
+    public void tableFormat(List<Dataset> data)
+    {
+//        initComponents();
+//        initTable(data);
         Class<?> myType = Double.TYPE;
         for (Field field : Dataset.class.getDeclaredFields()) {
             Class<?> type = field.getType();
@@ -72,7 +72,11 @@ public class formAnalisis extends javax.swing.JPanel {
                 list1.add(stat);
             }
        }            
-
+    }
+    public formAnalisis(List<Dataset> data) {
+        initComponents();
+        initTable(data);
+        tableFormat(data);
     }    
      private List<Double> getBeanList(String bean,List<Dataset> data) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
      {
@@ -235,7 +239,7 @@ public class formAnalisis extends javax.swing.JPanel {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
-    private void initTable(List<Dataset> data) {
+    public  void initTable(List<Dataset> data) {
         List<Map<String,Long>> listMap = new LinkedList<>();
         Map<String,Long> mapper = new TreeMap<>();
         mapper.put("0.Data", (long) data.size());
@@ -277,8 +281,9 @@ public class formAnalisis extends javax.swing.JPanel {
             ListFun.add(funcTemp);
             funcTemp = (Dataset a) -> "9.Left:"+a.getLefts();
             ListFun.add(funcTemp);
-
+            int m = 0;
             for (Function function : ListFun) {
+                    m++;
                      Map<String, Long> fun = data.stream()
                             .collect(Collectors.groupingBy(
                                     function, Collectors.counting()
@@ -286,14 +291,17 @@ public class formAnalisis extends javax.swing.JPanel {
                      Map<String , Long> map = new TreeMap<>();
                      map.putAll(fun);
                      listMap.add(map);
+                     mapper.put("0. Variasi Data Column:"+m, map.size()*1l);
          }
             
         //Populate table
         List<String> listString = new LinkedList<>();
         int max = -1;
+        m = -1;
         for (Map<String, Long> map : listMap) {
-                listString.add("Key ");
-                listString.add("Value ");            
+                m++;
+                listString.add("Key:"+m);
+                listString.add("Value:"+m);            
                 if (max < map.size()) {
                     max = map.size();
             }

@@ -39,6 +39,8 @@ public class mainForm extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        formOlahData1 = new neo.form.formOlahData();
+        formAnalisis1 = new neo.form.formAnalisis();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,20 +75,22 @@ public class mainForm extends javax.swing.JFrame {
         jPanel3.add(jButton4);
 
         jButton5.setText("ANALISIS DATASET (ANYLIZE DATASET)");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         jPanel3.add(jButton5);
 
         jButton6.setText("KOMPARASI (COMPARATION)");
         jPanel3.add(jButton6);
 
         jButton7.setText("KELUAR (EXIT)");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
         jPanel3.add(jButton7);
 
         jPanel2.add(jPanel3, "card2");
+        jPanel2.add(formOlahData1, "form");
+        jPanel2.add(formAnalisis1, "card4");
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -94,9 +98,12 @@ public class mainForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        System.out.println("neo.form.mainForm.jButton3ActionPerformed()");
         this.jButton2.setText("INPUT DATA");
         CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
-        cardLayout.show(jPanel2, "card3");        // TODO add your handling code here:
+        cardLayout.show(jPanel2, "form");
+        formOlahData1.reset();
+        // TODO add your handling code here:
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -109,6 +116,18 @@ public class mainForm extends javax.swing.JFrame {
         System.exit(0);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        this.jButton2.setText("ANALISIS DATA");
+//        formAnalisis1 = new formAnalisis(formOlahData1.getDataAll());
+        CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
+        cardLayout.show(jPanel2, "card4");
+        formAnalisis1.initTable(formOlahData1.getDataAll());
+        formAnalisis1.tableFormat(formOlahData1.getDataAll());
+//        formOlahData1.reset();
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -146,6 +165,8 @@ public class mainForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private neo.form.formAnalisis formAnalisis1;
+    private neo.form.formOlahData formOlahData1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

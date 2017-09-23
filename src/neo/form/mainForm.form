@@ -92,6 +92,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="ANALISIS DATASET (ANYLIZE DATASET)"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jButton6">
               <Properties>
@@ -108,7 +111,14 @@
         <Component class="neo.form.formOlahData" name="formOlahData1">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="card3"/>
+              <CardConstraints cardName="form"/>
+            </Constraint>
+          </Constraints>
+        </Component>
+        <Component class="neo.form.formAnalisis" name="formAnalisis1">
+          <Constraints>
+            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+              <CardConstraints cardName="card4"/>
             </Constraint>
           </Constraints>
         </Component>
