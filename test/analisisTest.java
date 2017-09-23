@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -68,7 +69,7 @@ public class analisisTest {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-     @Test
+//     @Test
      public void hello() {
         System.out.println("analisisTest.hello()");
         EntityManager entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU").createEntityManager();
@@ -255,4 +256,15 @@ public class analisisTest {
             printFields(prefix+"  ", value);
         }
     }
+     @Test
+     public void test3()
+        {
+            List<String> listString = new LinkedList<>();
+            for (int i = 0; i < 10; i++) {
+                listString.add("Key");
+                listString.add("Value");
+            }
+            String[] strings = listString.stream().toArray(String[]::new);
+        }
+         
 }

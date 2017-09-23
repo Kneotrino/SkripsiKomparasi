@@ -10,11 +10,14 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -46,7 +49,8 @@ public class formAnalisis extends javax.swing.JPanel {
     }    
 
     public formAnalisis(List<Dataset> data) {
-        initComponents();        
+        initComponents();
+        initTable(data);
         Class<?> myType = Double.TYPE;
         for (Field field : Dataset.class.getDeclaredFields()) {
             Class<?> type = field.getType();
@@ -66,8 +70,8 @@ public class formAnalisis extends javax.swing.JPanel {
                 }
                 stat.setNameDesc(field.getName());
                 list1.add(stat);
-           }
-            }            
+            }
+       }            
 
     }    
      private List<Double> getBeanList(String bean,List<Dataset> data) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
@@ -75,14 +79,6 @@ public class formAnalisis extends javax.swing.JPanel {
          System.out.println("bean = " + bean);
           List<Double> value = new LinkedList<>();
           List<String> nope = new LinkedList<>();
-//          nope.add("changeSupport");
-//          nope.add("serialVersionUID");
-//          nope.add("id");
-//          nope.add("division");
-//          if (nope.contains(bean)) {
-//              System.out.print("\tnope");
-//             return null;
-//         }
 
          for (Dataset dataset : data) {
              Field field = Dataset.class.getDeclaredField(bean);
@@ -108,25 +104,12 @@ public class formAnalisis extends javax.swing.JPanel {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         list1 = org.jdesktop.observablecollections.ObservableCollections.observableList(new LinkedList<neo.table.deskriptif>());
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        setLayout(new java.awt.GridLayout(1, 0));
+        setLayout(new java.awt.GridLayout(2, 0));
 
         jTable2.setAutoCreateRowSorter(true);
 
@@ -183,6 +166,23 @@ public class formAnalisis extends javax.swing.JPanel {
 
         add(jScrollPane2);
 
+        jTable1.setAutoCreateRowSorter(true);
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        jScrollPane1.setViewportView(jTable1);
+
+        add(jScrollPane1);
+
         bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -234,4 +234,89 @@ public class formAnalisis extends javax.swing.JPanel {
     private java.util.List<neo.table.deskriptif> list1;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    private void initTable(List<Dataset> data) {
+        List<Map<String,Long>> listMap = new LinkedList<>();
+        Map<String,Long> mapper = new TreeMap<>();
+        mapper.put("0.Data", (long) data.size());
+        mapper.put("0.Attribut", 9l);
+        mapper.put("0.Kelas", 2l);
+        mapper.put("0.Binary", 2l);
+        mapper.put("0.Double", 2l);
+        mapper.put("0.Enum", 3l);
+        mapper.put("0.Numeric", 2l);
+        listMap.add(mapper);
+        
+        NavigableSet<Double> groups = new TreeSet<>();
+        BigDecimal temp = BigDecimal.ZERO;        
+         for (int i = 0; i < 10; i++) {
+             temp = temp.add(BigDecimal.valueOf(.1d));
+             groups.add(temp.doubleValue());
+         }
+        NavigableSet<Integer> rangeInt = new TreeSet<>();
+         for (int i = 0; i < 500; i+=10) {
+             rangeInt.add(i);
+         }
+            List<Function> ListFun = new LinkedList<>();
+            Function<Dataset, String> funcTemp;
+            funcTemp = (Dataset a) -> "1.Satisfaction:"+groups.ceiling(a.getSatisfaction());
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "2.Evaluation:"+groups.ceiling(a.getSatisfaction());
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "3.Number Project:"+a.getNumberproject();
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "4.Avarage Montly Hours:"+ rangeInt.floor(a.getAvaragehours());
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "5.Time Spend Company:"+a.getTimespendcompany();
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "6.Work Accident:"+a.getWorkaccident();
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "7.Promotion:"+a.getPromotion();
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "8.Division:"+a.getDivision();
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "9.Left:"+a.getLefts();
+            ListFun.add(funcTemp);
+
+            for (Function function : ListFun) {
+                     Map<String, Long> fun = data.stream()
+                            .collect(Collectors.groupingBy(
+                                    function, Collectors.counting()
+                            ));
+                     Map<String , Long> map = new TreeMap<>();
+                     map.putAll(fun);
+                     listMap.add(map);
+         }
+            
+        //Populate table
+        List<String> listString = new LinkedList<>();
+        int max = -1;
+        for (Map<String, Long> map : listMap) {
+                listString.add("Key ");
+                listString.add("Value ");            
+                if (max < map.size()) {
+                    max = map.size();
+            }
+        }
+        System.out.println("max = " + max);
+        String[] title = listString.stream().toArray(String[]::new);
+//        Object tableValue  = new Object[10][10];
+        Object[][] dataTable = new Object[max+1][title.length];
+        int j = 0;
+        for (Map<String, Long> map : listMap) {
+                int i = 0;                
+                for(Map.Entry<String, Long> entry : map.entrySet()) {
+                  dataTable[i][j] = entry.getKey();
+                  dataTable[i][j+1] = entry.getValue();
+                  i++;
+                }
+                j+=2;
+        }
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            dataTable,
+            title
+        ));        
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
