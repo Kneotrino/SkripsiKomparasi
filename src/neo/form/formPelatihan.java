@@ -41,6 +41,7 @@ public class formPelatihan extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextPane1 = new javax.swing.JTextPane();
+        jProgressBar1 = new javax.swing.JProgressBar();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -87,11 +88,17 @@ public class formPelatihan extends javax.swing.JFrame {
         getContentPane().add(jPanel1);
         getContentPane().add(formOlahData1);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.BorderLayout());
 
         jScrollPane1.setViewportView(jTextPane1);
 
-        jPanel2.add(jScrollPane1);
+        jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jProgressBar1.setValue(50);
+        jProgressBar1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "PROGRESS BAR", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP));
+        jProgressBar1.setMinimumSize(new java.awt.Dimension(20, 30));
+        jProgressBar1.setPreferredSize(new java.awt.Dimension(146, 40));
+        jPanel2.add(jProgressBar1, java.awt.BorderLayout.NORTH);
 
         getContentPane().add(jPanel2);
 
@@ -169,6 +176,7 @@ public class formPelatihan extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
