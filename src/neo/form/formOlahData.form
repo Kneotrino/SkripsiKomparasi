@@ -142,7 +142,6 @@
               <Subbinding sourcePath="${id}">
                 <BindingParameter name="NAME" value="Id"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.EDITABLE" value="false"/>
               </Subbinding>
               <Subbinding sourcePath="${satisfaction}">
                 <BindingParameter name="NAME" value="Satisfaction"/>

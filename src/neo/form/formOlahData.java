@@ -96,7 +96,6 @@ public class formOlahData extends JPanel {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${id}"));
         columnBinding.setColumnName("Id");
         columnBinding.setColumnClass(Integer.class);
-        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${satisfaction}"));
         columnBinding.setColumnName("Satisfaction");
         columnBinding.setColumnClass(Double.class);
@@ -220,14 +219,14 @@ public class formOlahData extends JPanel {
             else if (evt.getSource() == newButton2) {
                 formOlahData.this.newButton2ActionPerformed(evt);
             }
+            else if (evt.getSource() == newButton5) {
+                formOlahData.this.newButton5ActionPerformed(evt);
+            }
             else if (evt.getSource() == newButton3) {
                 formOlahData.this.newButton3ActionPerformed(evt);
             }
             else if (evt.getSource() == newButton4) {
                 formOlahData.this.newButton4ActionPerformed(evt);
-            }
-            else if (evt.getSource() == newButton5) {
-                formOlahData.this.newButton5ActionPerformed(evt);
             }
         }
     }// </editor-fold>//GEN-END:initComponents
