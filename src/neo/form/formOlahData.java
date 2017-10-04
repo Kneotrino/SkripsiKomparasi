@@ -242,7 +242,6 @@ public class formOlahData extends JPanel {
         }
         list.clear();
         list.addAll(data);
-
         Query createQuery = entityManager.createQuery("SELECT COUNT(d) FROM Dataset d");
         long get = (long) createQuery.getResultList().get(0);
         System.out.println("get = " + get);
@@ -348,7 +347,7 @@ public class formOlahData extends JPanel {
             int x = temp * 100;            
             int y = (temp+1) * 100;
             query.setFirstResult(x);
-            query.setMaxResults(y);            
+            query.setMaxResults(100);            
         }
         else {
             query.setFirstResult(0);
@@ -364,7 +363,7 @@ public class formOlahData extends JPanel {
         System.out.println("temp = " + temp);
         int y = temp * 100;
         query.setFirstResult(x);
-        query.setMaxResults(y);
+        query.setMaxResults(100);
         refreshButtonActionPerformed(evt);
         
         // TODO add your handling code here:
@@ -391,10 +390,12 @@ public class formOlahData extends JPanel {
         System.out.println("temp = " + temp);
         int y = 100;
         if (temp > 0 ) {
-            y = temp * 100;
+            y = (temp+1) * 100;
         }
+        System.out.println("x = " + x);
+        System.out.println("y = " + y);
         query.setFirstResult(x);
-        query.setMaxResults(y);
+        query.setMaxResults(100);
         refreshButtonActionPerformed(evt);
         // TODO add your handling code here:
     }//GEN-LAST:event_newButton5ActionPerformed
