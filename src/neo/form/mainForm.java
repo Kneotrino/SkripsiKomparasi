@@ -122,6 +122,7 @@ public class mainForm extends javax.swing.JFrame {
 //        formAnalisis1 = new formAnalisis(formOlahData1.getDataAll());
         CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
         cardLayout.show(jPanel2, "card4");
+        formAnalisis1.Reset();
         formAnalisis1.initTable(formOlahData1.getDataAll());
         formAnalisis1.tableFormat(formOlahData1.getDataAll());
 //        formOlahData1.reset();

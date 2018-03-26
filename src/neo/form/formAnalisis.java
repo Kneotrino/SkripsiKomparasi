@@ -78,6 +78,7 @@ public class formAnalisis extends javax.swing.JPanel {
         initTable(data);
         tableFormat(data);
     }    
+    
      private List<Double> getBeanList(String bean,List<Dataset> data) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
      {
          System.out.println("bean = " + bean);
@@ -239,6 +240,10 @@ public class formAnalisis extends javax.swing.JPanel {
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
+    public void Reset()
+    {
+        this.list1.clear();
+    }
     public  void initTable(List<Dataset> data) {
         List<Map<String,Long>> listMap = new LinkedList<>();
         Map<String,Long> mapper = new TreeMap<>();
