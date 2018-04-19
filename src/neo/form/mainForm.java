@@ -6,6 +6,7 @@
 package neo.form;
 
 import java.awt.CardLayout;
+import javax.swing.JFrame;
 
 /**
  *
@@ -18,6 +19,7 @@ public class mainForm extends javax.swing.JFrame {
      */
     public mainForm() {
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -41,6 +43,8 @@ public class mainForm extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         formOlahData1 = new neo.form.formOlahData();
         formAnalisis1 = new neo.form.formAnalisis();
+        formKlasifikasi1 = new neo.form.formKlasifikasi();
+        formPelatihan1 = new neo.form.formPelatihan();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +76,11 @@ public class mainForm extends javax.swing.JFrame {
         jPanel3.add(jButton3);
 
         jButton4.setText("PEMBELAJARAN (LEARNING)");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         jPanel3.add(jButton4);
 
         jButton5.setText("ANALISIS DATASET (ANYLIZE DATASET)");
@@ -83,6 +92,11 @@ public class mainForm extends javax.swing.JFrame {
         jPanel3.add(jButton5);
 
         jButton6.setText("KOMPARASI (COMPARATION)");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         jPanel3.add(jButton6);
 
         jButton7.setText("KELUAR (EXIT)");
@@ -91,6 +105,8 @@ public class mainForm extends javax.swing.JFrame {
         jPanel2.add(jPanel3, "card2");
         jPanel2.add(formOlahData1, "form");
         jPanel2.add(formAnalisis1, "card4");
+        jPanel2.add(formKlasifikasi1, "card5");
+        jPanel2.add(formPelatihan1, "card6");
 
         getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
@@ -119,7 +135,6 @@ public class mainForm extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         this.jButton2.setText("ANALISIS DATA");
-//        formAnalisis1 = new formAnalisis(formOlahData1.getDataAll());
         CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
         cardLayout.show(jPanel2, "card4");
         formAnalisis1.Reset();
@@ -129,6 +144,20 @@ public class mainForm extends javax.swing.JFrame {
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        this.jButton2.setText("ANALISIS DATA");
+        formPelatihan1.refresh();
+        CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
+        cardLayout.show(jPanel2, "card6");
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        this.jButton2.setText("KOMPARASI DATA");
+        CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
+        cardLayout.show(jPanel2, "card5");        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -167,7 +196,9 @@ public class mainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private neo.form.formAnalisis formAnalisis1;
+    private neo.form.formKlasifikasi formKlasifikasi1;
     private neo.form.formOlahData formOlahData1;
+    private neo.form.formPelatihan formPelatihan1;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

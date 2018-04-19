@@ -124,7 +124,7 @@ public class formOlahData extends JPanel {
         columnBinding.setColumnName("Salary");
         columnBinding.setColumnClass(Integer.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${lefts}"));
-        columnBinding.setColumnName("Lefts");
+        columnBinding.setColumnName("Left");
         columnBinding.setColumnClass(Integer.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();

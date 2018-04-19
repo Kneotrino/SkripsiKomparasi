@@ -180,7 +180,7 @@
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
               </Subbinding>
               <Subbinding sourcePath="${lefts}">
-                <BindingParameter name="NAME" value="Lefts"/>
+                <BindingParameter name="NAME" value="Left"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Integer.class"/>
               </Subbinding>
             </BindingProperty>
