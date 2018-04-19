@@ -7,23 +7,19 @@
 import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
-import java.beans.PropertyDescriptor;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import neo.table.Dataset;
+import neo.utils.DatasetJpaController;
+import neo.utils.methodUtil;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -53,7 +49,7 @@ public class NewEmptyJUnitTest {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-     @Test
+//     @Test
      public void hello() {
          System.out.println("NewEmptyJUnitTest.hello()");
         try {
@@ -69,5 +65,41 @@ public class NewEmptyJUnitTest {
         } catch (Exception ex) {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+     }
+//     @Test
+     public void math() {
+         double  x  = 120;
+         double mean = 110;
+         double max = 100;
+         double min = 150;
+         
+         double y = (x - mean) / (max - min);
+         System.out.println("y = " + y);
+
+     }    
+     @Test
+     public void testKNN() {
+        DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
+        List<Dataset> findDatasetEntities = djp.findDatasetEntities();
+        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 10000));
+        Double sumLatihLeft = 0d;
+         for (Dataset dataset : DataLatih) {
+             sumLatihLeft += dataset.getLeftsDouble();
+         }
+        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(10000, 14999));
+        Double sumUjiLeft = 0d;
+         for (Dataset dataset : DataUji) {
+             sumUjiLeft += dataset.getLeftsDouble();
+         }
+
+        
+        List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, 5);
+        System.out.println("sumLatihLeft = " + sumLatihLeft);
+        System.out.println("sumUjiLeft = " + sumUjiLeft);
+        Double sumUjiKelasKNN = 0d;
+         for (Dataset dataset : KNN) {
+             sumUjiKelasKNN += dataset.getKelas();
+         }
+         System.out.println("sumUjiKelasKNN = " + sumUjiKelasKNN);
      }
 }

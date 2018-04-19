@@ -6,9 +6,16 @@
 package neo.form;
 
 import java.awt.EventQueue;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Date;
+import java.util.List;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import neo.table.Dataset;
 import neo.utils.DatasetJpaController;
+import neo.utils.SerializationUtil;
 import neo.utils.consoleStream;
 
 /**
@@ -31,7 +38,13 @@ public class formKlasifikasi extends javax.swing.JPanel {
         System.setOut(printStream);
         System.setErr(printStream);
     }
-
+    public void refresh()
+    {
+        int datasetCount = djp.getDatasetCount();
+//        jFormattedTextField1.setValue(datasetCount);
+        System.setOut(printStream);
+        System.setErr(printStream);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,30 +54,116 @@ public class formKlasifikasi extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableAnalisis = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableRelevancy = new javax.swing.JTable();
+
+        setLayout(new java.awt.GridLayout(2, 0));
+
+        jPanel1.setLayout(new java.awt.GridLayout(0, 2));
+
+        jButton1.setText("MULAI KLASIFIKASI");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1);
+        jPanel1.add(jLabel1);
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("K");
+        jPanel1.add(jLabel2);
+
+        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        jFormattedTextField1.setValue(1);
+        jPanel1.add(jFormattedTextField1);
+
+        add(jPanel1);
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("ANALISIS"));
+
+        jTableAnalisis.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTableAnalisis);
+
+        add(jScrollPane2);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(154, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(83, 83, 83)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(121, Short.MAX_VALUE))
-        );
+        add(jScrollPane1);
+
+        jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("RELEVANCY"));
+
+        jTableRelevancy.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTableRelevancy);
+
+        add(jScrollPane3);
     }// </editor-fold>//GEN-END:initComponents
+    private String getFileExtension(File file) {
+        String name = file.getName();
+        try {
+            return name.substring(name.lastIndexOf(".") + 1);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        JFileChooser jfc = new JFileChooser();
+        int r = jfc.showOpenDialog(null);
+        File selectedFile = jfc.getSelectedFile();
+        String fileExtension = getFileExtension(selectedFile);
+        System.out.println("METODE = " + fileExtension);
+        
+        List<Dataset> deserialize;
+        List<Dataset> classifikasi;
+        try {
+            deserialize = (List<Dataset>) SerializationUtil.deserialize(selectedFile.getPath());
+            int size = deserialize.size();
+            System.out.println("size = " + size);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        //memulai metode
+        Date now = new Date();
+        System.out.println("now = " + now);
+
+        //akhir metode
+        Date end = new Date();
+        System.out.println("end = " + end);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     public static void main(String[] args) {
         /* Set the Nimbus look and feel */
@@ -105,7 +204,16 @@ public class formKlasifikasi extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTableAnalisis;
+    private javax.swing.JTable jTableRelevancy;
     private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

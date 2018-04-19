@@ -34,14 +34,14 @@ public class formPelatihan extends javax.swing.JPanel {
         initComponents();
         djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         printStream = new PrintStream(new consoleStream(jTextArea1));
-        System.setOut(printStream);
-        System.setErr(printStream);
     }
     
     public void refresh()
     {
         int datasetCount = djp.getDatasetCount();
         jFormattedTextField1.setValue(datasetCount);
+        System.setOut(printStream);
+        System.setErr(printStream);
     }
 
     /**
@@ -69,7 +69,6 @@ public class formPelatihan extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
         jPanel2 = new javax.swing.JPanel();
-        jProgressBar1 = new javax.swing.JProgressBar();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
 
@@ -87,7 +86,7 @@ public class formPelatihan extends javax.swing.JPanel {
         });
         jPanel1.add(jButton1);
 
-        jButton2.setText("SIMPAN");
+        jButton2.setText("STATISTIK DATA LATIH");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -137,9 +136,6 @@ public class formPelatihan extends javax.swing.JPanel {
         add(jPanel1);
 
         jPanel2.setLayout(new java.awt.BorderLayout());
-
-        jProgressBar1.setValue(1);
-        jPanel2.add(jProgressBar1, java.awt.BorderLayout.NORTH);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -207,14 +203,6 @@ public class formPelatihan extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        int r = jFileChooser1.showOpenDialog(null);
-        File selectedFile = jFileChooser1.getSelectedFile();
-        try {
-            List<Dataset> deserialize = (List<Dataset>) SerializationUtil.deserialize(selectedFile.getPath());
-            int size = deserialize.size();
-            System.out.println("size = " + size);
-        } catch (Exception e) {
-        }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -270,7 +258,6 @@ public class formPelatihan extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTextArea jTextArea1;

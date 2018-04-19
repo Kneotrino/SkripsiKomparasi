@@ -155,6 +155,7 @@ public class mainForm extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         this.jButton2.setText("KOMPARASI DATA");
+        formKlasifikasi1.refresh();
         CardLayout cardLayout = (CardLayout) jPanel2.getLayout();
         cardLayout.show(jPanel2, "card5");        // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed

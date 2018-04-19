@@ -81,10 +81,62 @@ public class Dataset implements Serializable {
     @Column(name = "TIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date time;
+    
+    
 
     public Dataset() {
         time = new Date();
     }
+
+    @Transient
+    private double distance = 0;
+    public static final String PROP_DISTANCE = "distance";
+
+    /**
+     * Get the value of distance
+     *
+     * @return the value of distance
+     */
+    public double getDistance() {
+        return distance;
+    }
+
+    /**
+     * Set the value of distance
+     *
+     * @param distance new value of distance
+     */
+    public void setDistance(double distance) {
+        double oldDistance = this.distance;
+        this.distance = distance;
+        changeSupport.firePropertyChange(PROP_DISTANCE, oldDistance, distance);
+    }
+ 
+    @Transient    
+    private double kelas = -1;
+
+    public static final String PROP_KELAS = "kelas";
+
+    /**
+     * Get the value of kelas
+     *
+     * @return the value of kelas
+     */
+    public double getKelas() {
+        return kelas;
+    }
+
+    /**
+     * Set the value of kelas
+     *
+     * @param kelas new value of kelas
+     */
+    public void setKelas(double kelas) {
+        double oldKelas = this.kelas;
+        this.kelas = kelas;
+        changeSupport.firePropertyChange(PROP_KELAS, oldKelas, kelas);
+    }
+
 
     public Dataset(Integer id) {
         this.id = id;
@@ -154,6 +206,7 @@ public class Dataset implements Serializable {
         return workaccident;
     }
 
+
     public void setWorkaccident(Integer workaccident) {
         Integer oldWorkaccident = this.workaccident;
         this.workaccident = workaccident;
@@ -192,6 +245,11 @@ public class Dataset implements Serializable {
 
     public Integer getLefts() {
         return lefts;
+    }
+    
+    public Double getLeftsDouble()
+    {
+        return lefts * 1d;
     }
 
     public void setLefts(Integer lefts) {
@@ -242,7 +300,7 @@ public class Dataset implements Serializable {
 
     @Override
     public String toString() {
-        return "neo.table.Dataset[ id=" + id + " ]";
+        return "{d=" + getDistance() + " ]";
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {
