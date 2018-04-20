@@ -113,7 +113,7 @@ public class Dataset implements Serializable {
     }
  
     @Transient    
-    private double kelas = -1;
+    private double kelas = 0;
 
     public static final String PROP_KELAS = "kelas";
 
@@ -300,7 +300,7 @@ public class Dataset implements Serializable {
 
     @Override
     public String toString() {
-        return "{d=" + getDistance() + " ]";
+        return "[No=" + id+ " ]";
     }
 
     public void addPropertyChangeListener(PropertyChangeListener listener) {

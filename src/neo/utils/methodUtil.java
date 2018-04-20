@@ -5,13 +5,8 @@
  */
 package neo.utils;
 
-import java.awt.EventQueue;
 import java.util.LinkedList;
 import java.util.List;
-import javax.swing.JFrame;
-import neo.form.formAnalisis;
-import neo.form.formOlahData;
-import neo.form.formPelatihan;
 import neo.table.Dataset;
 import neo.table.deskriptif;
 
@@ -28,6 +23,12 @@ public class methodUtil {
     
 
             
+    public static List<Dataset> NBtrain(List<Dataset> dataLatih,List<Dataset> dataUji,int k)
+    {        
+        
+        
+        return dataUji;
+    }
     public static List<Dataset> KNN(List<Dataset> dataLatih,List<Dataset> dataUji,int k)
     {        
         System.out.println("dataLatih = " + dataLatih.size());
@@ -38,13 +39,9 @@ public class methodUtil {
         numberprojectSTD = new deskriptif();
         
         //Data statistik data latih
-        dataLatih.stream().map((d) -> {
+        dataLatih.stream().forEachOrdered((d) -> {
             avaragehoursSTD.addValue(d.getAvaragehours());
-            return d;
-        }).map((d) -> {
             timespendcompanySTD.addValue(d.getTimespendcompany());
-            return d;
-        }).forEachOrdered((d) -> {
             numberprojectSTD.addValue(d.getNumberproject());
         });
         
@@ -62,10 +59,11 @@ public class methodUtil {
                 //vote
                 double sumKelas = 0;
                 sumKelas = nearest.stream().map((dataset) -> dataset.getLeftsDouble()).reduce(sumKelas, (accumulator, _item) -> accumulator + _item);
-                if (sumKelas > 0.5d) 
-                    d.setKelas(1);
+                if (sumKelas > k/2d) 
+                    d.setKelas(1d);
                 else
-                    d.setKelas(0);
+                    d.setKelas(0d);
+                System.out.println("sumKelas = " + sumKelas);
 
         }
         return dataUji;

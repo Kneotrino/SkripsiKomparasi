@@ -49,6 +49,12 @@ public class NewEmptyJUnitTest {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
+    
+    //
+//     @Test
+     public void NB(){
+         System.out.println("this = " + this);
+        }
 //     @Test
      public void hello() {
          System.out.println("NewEmptyJUnitTest.hello()");
@@ -81,17 +87,19 @@ public class NewEmptyJUnitTest {
      public void testKNN() {
         DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
-        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 10000));
+        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 100));
         Double sumLatihLeft = 0d;
+         System.out.println("1");
          for (Dataset dataset : DataLatih) {
              sumLatihLeft += dataset.getLeftsDouble();
          }
-        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(10000, 14999));
+         System.out.println("2");
+        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(100, 130));
         Double sumUjiLeft = 0d;
          for (Dataset dataset : DataUji) {
              sumUjiLeft += dataset.getLeftsDouble();
          }
-
+         System.out.println("3");
         
         List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, 5);
         System.out.println("sumLatihLeft = " + sumLatihLeft);

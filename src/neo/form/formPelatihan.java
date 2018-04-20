@@ -203,6 +203,23 @@ public class formPelatihan extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       int retrival = jFileChooser1.showOpenDialog(null);
+       File selectedFile = jFileChooser1.getSelectedFile();
+        System.out.println("selectedFile = " + selectedFile);
+        try {
+            
+           List<Dataset> deserialize = (List<Dataset>) SerializationUtil.deserialize(selectedFile.getPath());
+           EventQueue.invokeLater(() -> {
+               JFrame frame = new JFrame("PELATIHAN");
+               frame.setContentPane(new formAnalisis(deserialize));
+               frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+               frame.pack();
+               frame.setExtendedState(6);
+               frame.setVisible(true);
+           });
+            
+        } catch (Exception e) {
+        }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
