@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import neo.table.Dataset;
 import neo.table.deskriptif;
+import neo.table.naiveBayesPobabilitas;
 
 /**
  *
@@ -23,11 +24,74 @@ public class methodUtil {
     
 
             
-    public static List<Dataset> NBtrain(List<Dataset> dataLatih,List<Dataset> dataUji,int k)
+    public static List<naiveBayesPobabilitas> NBtrain(List<Dataset> dataLatih,int k)
     {        
+        List<naiveBayesPobabilitas> tempTrain = new LinkedList<>();
+        System.out.println("Laplace Smoothing K = " + k);
+        avaragehoursSTD = new deskriptif();
+        timespendcompanySTD = new deskriptif();
+        numberprojectSTD = new deskriptif();
         
+        //Data statistik data latih
+        dataLatih.stream().forEachOrdered((d) -> {
+            avaragehoursSTD.addValue(d.getAvaragehours());
+            timespendcompanySTD.addValue(d.getTimespendcompany());
+            numberprojectSTD.addValue(d.getNumberproject());
+        });        
+        naiveBayesPobabilitas workAccidentTrue = new naiveBayesPobabilitas("workAccident;True");
+        naiveBayesPobabilitas workAccidentFalse = new naiveBayesPobabilitas("workAccident;False");
         
-        return dataUji;
+        naiveBayesPobabilitas promotionTrue = new naiveBayesPobabilitas("promotion;True");
+        naiveBayesPobabilitas promotionFalse = new naiveBayesPobabilitas("promotion;False");
+        
+        naiveBayesPobabilitas avaragehoursTrue = new naiveBayesPobabilitas("avaragehours;True");
+        naiveBayesPobabilitas avaragehoursFalse = new naiveBayesPobabilitas("avaragehours;False");
+
+        naiveBayesPobabilitas timespendcompanyTrue = new naiveBayesPobabilitas("timespendcompany;True");
+        naiveBayesPobabilitas timespendcompanyFalse = new naiveBayesPobabilitas("timespendcompany;False");
+        
+        naiveBayesPobabilitas numberprojectTrue = new naiveBayesPobabilitas("numberproject;True");
+        naiveBayesPobabilitas numberprojectFalse = new naiveBayesPobabilitas("numberproject;False");
+        
+        tempTrain.add(workAccidentTrue);
+        tempTrain.add(workAccidentFalse);
+        tempTrain.add(promotionTrue);
+        tempTrain.add(promotionFalse);
+        tempTrain.add(avaragehoursTrue);
+        tempTrain.add(avaragehoursFalse);
+        tempTrain.add(timespendcompanyTrue);
+        tempTrain.add(timespendcompanyFalse);
+        tempTrain.add(numberprojectTrue);
+        tempTrain.add(numberprojectFalse);
+                
+        //hitung kejadian
+        for (Dataset dataset : dataLatih) {
+            counterNaiveBayes(workAccidentTrue,workAccidentFalse,dataset.getWorkaccident()==1?true:false,dataset.getLefts());                            
+            counterNaiveBayes(promotionTrue,promotionFalse,dataset.getPromotion()==1?true:false,dataset.getLefts());                            
+            
+            counterNaiveBayes(avaragehoursTrue,
+                    avaragehoursFalse,
+                    dataset.getAvaragehours()>avaragehoursSTD.getMean()?true:false,
+                    dataset.getLefts());                            
+            counterNaiveBayes(timespendcompanyTrue,
+                    timespendcompanyFalse,
+                    dataset.getTimespendcompany()>timespendcompanySTD.getMean()?true:false,
+                    dataset.getLefts());                            
+            counterNaiveBayes(numberprojectTrue,
+                    numberprojectFalse,
+                    dataset.getNumberproject()>numberprojectSTD.getMean()?true:false,
+                    dataset.getLefts());                            
+        }
+        
+        //hitung probabilitas
+        for (naiveBayesPobabilitas bp : tempTrain) {
+            double pLeft= (bp.getCountLeft() + k) / (bp.getSumLeft() + (2d*k));
+            double pNotLeft= (bp.getCountNotLeft()+ k) / (bp.getSumNotLeft()+ (2d*k));
+            
+            bp.setProbabilitasLeft(pLeft);
+            bp.setProbabilitasNotLeft(pNotLeft);
+        }
+        return tempTrain;
     }
     public static List<Dataset> KNN(List<Dataset> dataLatih,List<Dataset> dataUji,int k)
     {        
@@ -44,6 +108,7 @@ public class methodUtil {
             timespendcompanySTD.addValue(d.getTimespendcompany());
             numberprojectSTD.addValue(d.getNumberproject());
         });
+        
         
         for (Dataset d : dataUji) {
             //Hitung jarak d ke semua himpunan datalatih
@@ -109,5 +174,36 @@ public class methodUtil {
     public static Double Normalisasi(Integer origin, deskriptif desk )
     {
         return (origin - desk.getMean()) / (desk.getMax() - desk.getMin());
+    }
+
+    private static void counterNaiveBayes(naiveBayesPobabilitas NBPTrue, naiveBayesPobabilitas NBPFalse, Boolean value, Integer DataClass) {
+            if (value) {
+                NBPTrue.addCount();
+                if (DataClass == 1) {
+                    NBPTrue.addCountLeft();
+                }
+                else {
+                    NBPTrue.addCountNotLeft();
+                }
+            }
+            else    {
+                NBPFalse.addCount();
+                if (DataClass == 1) {
+                    NBPFalse.addCountLeft();
+                }
+                else {
+                    NBPFalse.addCountNotLeft();
+                }
+            
+            }
+            if (DataClass == 1) {
+                NBPTrue.addSumLeft();
+                NBPFalse.addSumLeft();
+            }
+            else {
+                NBPTrue.addSumNotLeft();
+                NBPFalse.addSumNotLeft();
+            }
+            
     }
 }
