@@ -10,15 +10,20 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
  import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import neo.table.Dataset;
 import neo.utils.DatasetJpaController;
 import neo.utils.SerializationUtil;
 import neo.utils.consoleStream;
+import neo.utils.methodUtil;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -78,7 +83,7 @@ public class formPelatihan extends javax.swing.JPanel {
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 2));
 
-        jButton1.setText("MULAI PELATHIAN");
+        jButton1.setText("MULAI PELATIHAN");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -159,7 +164,7 @@ public class formPelatihan extends javax.swing.JPanel {
         String selectedItem = (String) jComboBox1.getSelectedItem();
         System.out.println("Metode = " + selectedItem);
         
-        long selectedK = jComboBox2.getSelectedIndex();
+        int selectedK = jComboBox2.getSelectedIndex();
         selectedK++;
         System.out.println("K = " + selectedK);
         
@@ -170,18 +175,49 @@ public class formPelatihan extends javax.swing.JPanel {
 
         List<Dataset> dataLatih = new LinkedList<>(pickNRandom(djp.findDatasetEntities(), selectedCount));
         
-        String namafile = "Data latih."+selectedItem;
+        
+        String namafile = "Data latih-"+" k = " + selectedK +"."+selectedItem;
         File file = new File(namafile);
         jFileChooser1.setSelectedFile(file);
         int retrival = jFileChooser1.showSaveDialog(null);
+        
+        System.out.println("retrival = " + retrival);
+        
         file = jFileChooser1.getSelectedFile();
-        System.out.println(dataLatih.getClass());
         System.out.println("Save file = " + file);
-        try {
-            SerializationUtil.serialize(dataLatih, file.getPath());                
-        } catch (IOException ex) {
-            Logger.getLogger(formPelatihan.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        
+        if (JFileChooser.CANCEL_OPTION == retrival) {
+            return ;
+        }
+            
+        if (jComboBox1.getSelectedIndex() == 0) {
+            //KNN            
+            System.out.println("KNN");
+            Map<String, Object> KNNtrainningTrain = new LinkedHashMap<>();
+            KNNtrainningTrain.put("DATA LATIH", dataLatih);
+            KNNtrainningTrain.put("K", selectedK);            
+            try {
+                SerializationUtil.serialize(KNNtrainningTrain, file.getPath());                
+            } catch (IOException ex) {
+                Logger.getLogger(formPelatihan.class.getName()).log(Level.SEVERE, null, ex);
+            }        
+        }
+        if (jComboBox1.getSelectedIndex() == 1) {
+            System.out.println("NB");
+            Map<String, Object> NBtrainningTrain = new LinkedHashMap<>();
+            NBtrainningTrain.put("DATA LATIH", dataLatih);
+            NBtrainningTrain.put("NB TRAIN", methodUtil.NBtrain(dataLatih, selectedK));
+            NBtrainningTrain.put("K",selectedK);
+            try {
+                SerializationUtil.serialize(NBtrainningTrain, file.getPath());                
+            } catch (IOException ex) {
+                Logger.getLogger(formPelatihan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //NB            
+        }
+        if (jComboBox1.getSelectedIndex() == 2) {
+            //C4.5            
+        }
         System.out.println("SELESAI\n");
 
         // TODO add your handling code here:
@@ -203,15 +239,21 @@ public class formPelatihan extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       int retrival = jFileChooser1.showOpenDialog(null);
-       File selectedFile = jFileChooser1.getSelectedFile();
-        System.out.println("selectedFile = " + selectedFile);
+        int retrival = jFileChooser1.showOpenDialog(null);
+        if (JFileChooser.CANCEL_OPTION == retrival) {
+            return ;
+        }
+        File selectedFile = jFileChooser1.getSelectedFile();
+        String extension = FilenameUtils.getExtension(selectedFile.getName());        
+        System.out.println("selectedFile = " + selectedFile);        
+        
         try {
-            
-           List<Dataset> deserialize = (List<Dataset>) SerializationUtil.deserialize(selectedFile.getPath());
+           
+           Map<String, Object> deserialize = (Map<String, Object>) SerializationUtil.deserialize(selectedFile.getPath());
+           List<Dataset> DataLatih = (List<Dataset>) deserialize.get("DATA LATIH");
            EventQueue.invokeLater(() -> {
-               JFrame frame = new JFrame("PELATIHAN");
-               frame.setContentPane(new formAnalisis(deserialize));
+               JFrame frame = new JFrame("STATISTIK DATA LATIH "+ extension);
+               frame.setContentPane(new formAnalisis(DataLatih));
                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                frame.pack();
                frame.setExtendedState(6);
