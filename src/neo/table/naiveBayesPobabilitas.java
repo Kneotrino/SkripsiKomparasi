@@ -15,13 +15,54 @@ import java.io.Serializable;
  */
 public class naiveBayesPobabilitas implements Serializable{
 
+    @Override
+    public String toString() {
+        return getAtribut()
+                + "\ncount = " + getCount()
+                + "\tleft = " + getCountLeft()
+                + "\tnotleft = " + getCountNotLeft()
+                + "\tSumLeft = " + getSumLeft()
+                + "\tSumNotLeft = " + getSumNotLeft()
+                + "\tP(left) = " + getProbabilitasLeft()
+                + "\tP(notleft) = " + getProbabilitasNotLeft();
+    }
+
     
     public naiveBayesPobabilitas() {
+    }
+
+    public naiveBayesPobabilitas(String atribut) {
+        this.atribut = atribut;
     }
 
     private int number;
 
     public static final String PROP_NUMBER = "number";
+    public static final Double JUMALAH_KELAS = 2d;
+    
+    private double N = 2d;
+
+    public static final String PROP_N = "N";
+
+    /**
+     * Get the value of N
+     *
+     * @return the value of N
+     */
+    public double getN() {
+        return N;
+    }
+
+    /**
+     * Set the value of N
+     *
+     * @param N new value of N
+     */
+    public void setN(double N) {
+        double oldN = this.N;
+        this.N = N;
+        propertyChangeSupport.firePropertyChange(PROP_N, oldN, N);
+    }
 
     /**
      * Get the value of number
@@ -48,6 +89,54 @@ public class naiveBayesPobabilitas implements Serializable{
     private double countLeft;
 
     private double countNotLeft;
+
+    private double sumLeft;
+
+    public static final String PROP_SUMLEFT = "sumLeft";
+
+    private double sumNotLeft;
+
+    public static final String PROP_SUMNOTLEFT = "sumNotLeft";
+
+    /**
+     * Get the value of sumNotLeft
+     *
+     * @return the value of sumNotLeft
+     */
+    public double getSumNotLeft() {
+        return sumNotLeft;
+    }
+
+    /**
+     * Set the value of sumNotLeft
+     *
+     * @param sumNotLeft new value of sumNotLeft
+     */
+    public void setSumNotLeft(double sumNotLeft) {
+        double oldSumNotLeft = this.sumNotLeft;
+        this.sumNotLeft = sumNotLeft;
+        propertyChangeSupport.firePropertyChange(PROP_SUMNOTLEFT, oldSumNotLeft, sumNotLeft);
+    }
+
+    /**
+     * Get the value of sumLeft
+     *
+     * @return the value of sumLeft
+     */
+    public double getSumLeft() {
+        return sumLeft;
+    }
+
+    /**
+     * Set the value of sumLeft
+     *
+     * @param sumLeft new value of sumLeft
+     */
+    public void setSumLeft(double sumLeft) {
+        double oldSumLeft = this.sumLeft;
+        this.sumLeft = sumLeft;
+        propertyChangeSupport.firePropertyChange(PROP_SUMLEFT, oldSumLeft, sumLeft);
+    }
 
     private double count;
 
@@ -131,8 +220,10 @@ public class naiveBayesPobabilitas implements Serializable{
      * @return the value of count
      */
     public double getCount() {
-        return count;
+        return countLeft+countNotLeft;
     }
+    
+    
 
     /**
      * Set the value of count
@@ -144,6 +235,11 @@ public class naiveBayesPobabilitas implements Serializable{
         this.count = count;
         propertyChangeSupport.firePropertyChange(PROP_COUNT, oldCount, count);
     }
+    
+    public void addCount()
+    {
+        setCount(count++);
+    }
 
     public static final String PROP_COUNTNOTLEFT = "countNotLeft";
 
@@ -154,6 +250,9 @@ public class naiveBayesPobabilitas implements Serializable{
      */
     public double getCountNotLeft() {
         return countNotLeft;
+    }
+    public void addCountNotLeft() {
+        this.countNotLeft += 1d;
     }
 
     /**
@@ -183,10 +282,20 @@ public class naiveBayesPobabilitas implements Serializable{
      *
      * @param countLeft new value of countLeft
      */
+    
     public void setCountLeft(double countLeft) {
         double oldCountLeft = this.countLeft;
         this.countLeft = countLeft;
         propertyChangeSupport.firePropertyChange(PROP_COUNTLEFT, oldCountLeft, countLeft);
+    }
+    public void addCountLeft() {
+        this.countLeft += 1d;
+    }
+    public void addSumLeft() {
+        this.sumLeft += 1d;
+    }
+    public void addSumNotLeft() {
+        this.sumNotLeft += 1d;
     }
 
     public static final String PROP_ATRIBUT = "atribut";

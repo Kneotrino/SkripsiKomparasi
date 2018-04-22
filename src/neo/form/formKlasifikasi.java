@@ -10,13 +10,24 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import javafx.stage.FileChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import neo.table.Dataset;
+import neo.table.peforma;
+import neo.table.relevancy;
 import neo.utils.DatasetJpaController;
 import neo.utils.SerializationUtil;
 import neo.utils.consoleStream;
+import neo.utils.methodUtil;
 
 /**
  *
@@ -53,20 +64,24 @@ public class formKlasifikasi extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        listRelevancy = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(new LinkedList<>());
+        listPeforma = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(new LinkedList<>());
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTableAnalisis = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableAnalisis = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableRelevancy = new javax.swing.JTable();
 
-        setLayout(new java.awt.GridLayout(2, 0));
+        setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
         jPanel1.setLayout(new java.awt.GridLayout(0, 2));
 
@@ -81,54 +96,124 @@ public class formKlasifikasi extends javax.swing.JPanel {
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("K");
+        jLabel2.setText("NILAI KNN K");
         jPanel1.add(jLabel2);
 
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jFormattedTextField1.setValue(1);
+        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField1.setText("5");
+        jFormattedTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFormattedTextField1ActionPerformed(evt);
+            }
+        });
         jPanel1.add(jFormattedTextField1);
 
         add(jPanel1);
 
-        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("ANALISIS"));
-
-        jTableAnalisis.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTableAnalisis);
-
-        add(jScrollPane2);
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        add(jScrollPane1);
+        jPanel2.add(jScrollPane1);
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("PEFORMA"));
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listPeforma, jTableAnalisis);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${info}"));
+        columnBinding.setColumnName("Info");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${classficationMemory}"));
+        columnBinding.setColumnName("Classfication Memory");
+        columnBinding.setColumnClass(Long.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${classficationTime}"));
+        columnBinding.setColumnName("Classfication Time");
+        columnBinding.setColumnClass(Long.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
+        jScrollPane2.setViewportView(jTableAnalisis);
+
+        jPanel2.add(jScrollPane2);
+
+        add(jPanel2);
 
         jScrollPane3.setBorder(javax.swing.BorderFactory.createTitledBorder("RELEVANCY"));
 
-        jTableRelevancy.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, listRelevancy, jTableRelevancy);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${info}"));
+        columnBinding.setColumnName("Info");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${jumlahData}"));
+        columnBinding.setColumnName("Jumlah Data");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${TP}"));
+        columnBinding.setColumnName("TP");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${TN}"));
+        columnBinding.setColumnName("TN");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${FP}"));
+        columnBinding.setColumnName("FP");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${FN}"));
+        columnBinding.setColumnName("FN");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${PRE}"));
+        columnBinding.setColumnName("PRE");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${TPR}"));
+        columnBinding.setColumnName("TPR");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${TNR}"));
+        columnBinding.setColumnName("TNR");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${PPV}"));
+        columnBinding.setColumnName("PPV");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${NPV}"));
+        columnBinding.setColumnName("NPV");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${FNR}"));
+        columnBinding.setColumnName("FNR");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${FPR}"));
+        columnBinding.setColumnName("FPR");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${FDR}"));
+        columnBinding.setColumnName("FDR");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${FOR}"));
+        columnBinding.setColumnName("FOR");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${ACC}"));
+        columnBinding.setColumnName("ACC");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${f1}"));
+        columnBinding.setColumnName("F1");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${MCC}"));
+        columnBinding.setColumnName("MCC");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${BM}"));
+        columnBinding.setColumnName("BM");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${DOR}"));
+        columnBinding.setColumnName("DOR");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${LRplus}"));
+        columnBinding.setColumnName("LRplus");
+        columnBinding.setColumnClass(Double.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${LRminus}"));
+        columnBinding.setColumnName("LRminus");
+        columnBinding.setColumnClass(Double.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         jScrollPane3.setViewportView(jTableRelevancy);
 
         add(jScrollPane3);
+
+        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
     private String getFileExtension(File file) {
         String name = file.getName();
@@ -138,32 +223,83 @@ public class formKlasifikasi extends javax.swing.JPanel {
             return "";
         }
     }
+    
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+        System.out.println("Memory Usege before = " + beforeUsedMem);
         JFileChooser jfc = new JFileChooser();
+        jfc.setFileFilter(new FileNameExtensionFilter("Train Files", "KNN", "NB", "C45"));
         int r = jfc.showOpenDialog(null);
+        if (r == JFileChooser.CANCEL_OPTION) {
+            return;
+        }
+        peforma p = new peforma();
+        Date now = new Date();
+        System.out.println("now = " + now);
         File selectedFile = jfc.getSelectedFile();
         String fileExtension = getFileExtension(selectedFile);
         System.out.println("METODE = " + fileExtension);
-        
-        List<Dataset> deserialize;
-        List<Dataset> classifikasi;
-        try {
-            deserialize = (List<Dataset>) SerializationUtil.deserialize(selectedFile.getPath());
-            int size = deserialize.size();
-            System.out.println("size = " + size);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        System.out.println("fileExtension = " + fileExtension);
+        Integer K = Integer.valueOf(jFormattedTextField1.getText()) ;
+        List<Dataset> findDatasetEntities = djp.findDatasetEntities();
+        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(0, 120));        
+        if (fileExtension.equals("KNN")) {
+            System.out.println("/nKNN");
+            System.out.println("K = " + K);
+            Map<String, Object> deserialize;
+            try {
+                deserialize = (Map<String, Object>) SerializationUtil.deserialize(selectedFile.getPath());
+                List<Dataset> DataLatih = (List<Dataset>) deserialize.get("DATA LATIH");
+                DataUji.removeAll(DataLatih);
+                List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, K);                
+                relevancy R = new relevancy("KNN k="+ K);
+                p.setInfo("KNN k="+K);
+                R.setJumlahData(DataUji.size());
+                Map<String, Long> collectTrue = 
+                        DataUji
+                                .stream()
+                                .collect(Collectors.groupingBy( (Dataset e) -> e.getRelevancy(), Collectors.counting()));   
+                System.out.println("collectTrue = " + collectTrue);
+                double TP = collectTrue.get("TP") != null? collectTrue.get("TP"):0d;
+                double TN = collectTrue.get("TN") != null? collectTrue.get("TN"):0d;
+                double FP = collectTrue.get("FP") != null? collectTrue.get("FP"):0d;
+                double FN = collectTrue.get("FN") != null? collectTrue.get("FN"):0d;
+                R.setTP(TP);
+                R.setTN(TN);
+                R.setFP(FP);
+                R.setFN(FN);
+                
+                
+                listRelevancy.add(R);
+                
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(formKlasifikasi.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (fileExtension.equals("NB")) {
+            
         }
 
+
         //memulai metode
-        Date now = new Date();
-        System.out.println("now = " + now);
 
         //akhir metode
+        long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+        System.out.println("Memory Usage After = " + afterUsedMem);
         Date end = new Date();
         System.out.println("end = " + end);
+        System.out.println("TIME(ms)  = " + (end.getTime() - now.getTime()) );
+        p.setClassficationTime(end.getTime() - now.getTime());
+        p.setClassficationMemory(afterUsedMem - beforeUsedMem);
+        System.out.println("Memory usege (byte) = " + p.getClassficationMemory());
+        listPeforma.add(p);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     public static void main(String[] args) {
         /* Set the Nimbus look and feel */
@@ -209,11 +345,15 @@ public class formKlasifikasi extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTableAnalisis;
     private javax.swing.JTable jTableRelevancy;
     private javax.swing.JTextArea jTextArea1;
+    private java.util.List<neo.table.peforma> listPeforma;
+    private java.util.List<neo.table.relevancy> listRelevancy;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 }

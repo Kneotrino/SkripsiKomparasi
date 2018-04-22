@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import neo.table.Dataset;
+import neo.table.naiveBayesPobabilitas;
 import neo.utils.DatasetJpaController;
 import neo.utils.methodUtil;
 import org.junit.After;
@@ -53,8 +54,30 @@ public class NewEmptyJUnitTest {
     //
 //     @Test
      public void NB(){
-         System.out.println("this = " + this);
+        DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
+        List<Dataset> findDatasetEntities = djp.findDatasetEntities();
+        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 12000));
+        List<Dataset> DataUJI = new LinkedList<>(findDatasetEntities.subList(0, 4000));
+        System.out.println("DataUJI = " + DataUJI.size());
+        System.out.println("DataLatih = " + DataLatih.size());
+        List<naiveBayesPobabilitas> NBtrain = methodUtil.NBtrain(DataLatih, 2);        
+//         for (naiveBayesPobabilitas bp : NBtrain) {
+//             System.out.println("bp = " + bp);
+//         }
+//         
+
+
+        methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUJI);
+
+        Double actualLeft = 0d;
+        Double prediksiLeft = 0d;
+        for (Dataset dataset : DataUJI) {
+             actualLeft += dataset.getLeftsDouble();
+             prediksiLeft += dataset.getKelas();
         }
+         System.out.println("prediksiLeft = " + prediksiLeft);
+         System.out.println("actualLeft = " + actualLeft);
+     }
 //     @Test
      public void hello() {
          System.out.println("NewEmptyJUnitTest.hello()");
@@ -101,13 +124,7 @@ public class NewEmptyJUnitTest {
          }
          System.out.println("3");
         
-        List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, 5);
-        System.out.println("sumLatihLeft = " + sumLatihLeft);
-        System.out.println("sumUjiLeft = " + sumUjiLeft);
-        Double sumUjiKelasKNN = 0d;
-         for (Dataset dataset : KNN) {
-             sumUjiKelasKNN += dataset.getKelas();
-         }
-         System.out.println("sumUjiKelasKNN = " + sumUjiKelasKNN);
+        List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, 1);
+        System.out.println("KNN = " + KNN.size());
      }
 }

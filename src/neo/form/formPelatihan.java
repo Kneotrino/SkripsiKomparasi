@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import neo.table.Dataset;
 import neo.utils.DatasetJpaController;
 import neo.utils.SerializationUtil;
@@ -39,12 +40,11 @@ public class formPelatihan extends javax.swing.JPanel {
         initComponents();
         djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         printStream = new PrintStream(new consoleStream(jTextArea1));
+        refresh();
     }
     
     public void refresh()
     {
-        int datasetCount = djp.getDatasetCount();
-        jFormattedTextField1.setValue(datasetCount);
         System.setOut(printStream);
         System.setErr(printStream);
     }
@@ -63,8 +63,6 @@ public class formPelatihan extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jFormattedTextField3 = new javax.swing.JFormattedTextField();
@@ -73,6 +71,14 @@ public class formPelatihan extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
         jComboBox2 = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jFormattedTextField5 = new javax.swing.JFormattedTextField();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jFormattedTextField4 = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -99,17 +105,12 @@ public class formPelatihan extends javax.swing.JPanel {
         });
         jPanel1.add(jButton2);
 
-        jLabel1.setText("JUMLAH DATA");
-        jPanel1.add(jLabel1);
-
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
-        jPanel1.add(jFormattedTextField1);
-
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel2.setText("PRESENTASE DATA(MIN 0, MAX 100)");
         jPanel3.add(jLabel2);
 
+        jFormattedTextField3.setEditable(false);
         jFormattedTextField3.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
         jFormattedTextField3.setMinimumSize(new java.awt.Dimension(50, 30));
 
@@ -119,6 +120,9 @@ public class formPelatihan extends javax.swing.JPanel {
         jPanel3.add(jFormattedTextField3);
 
         jPanel1.add(jPanel3);
+
+        jSlider1.setMinimum(1);
+        jSlider1.setValue(10);
         jPanel1.add(jSlider1);
 
         jLabel3.setText("METODE");
@@ -137,6 +141,41 @@ public class formPelatihan extends javax.swing.JPanel {
 
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
         jPanel1.add(jComboBox2);
+
+        jLabel5.setText("METODE PENGUJIAN");
+        jPanel1.add(jLabel5);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "USE TRAINNING", "SUPPLY TEST", "CROSS VALIDATION" }));
+        jComboBox3.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox3ItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(jComboBox3);
+
+        jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
+
+        jLabel7.setText("DARI");
+        jPanel5.add(jLabel7);
+
+        jFormattedTextField5.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField5.setEnabled(false);
+        jFormattedTextField5.setMinimumSize(new java.awt.Dimension(50, 30));
+        jPanel5.add(jFormattedTextField5);
+
+        jPanel1.add(jPanel5);
+
+        jPanel4.setLayout(new javax.swing.BoxLayout(jPanel4, javax.swing.BoxLayout.LINE_AXIS));
+
+        jLabel6.setText("SAMPAI");
+        jPanel4.add(jLabel6);
+
+        jFormattedTextField4.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField4.setEnabled(false);
+        jFormattedTextField4.setMinimumSize(new java.awt.Dimension(50, 30));
+        jPanel4.add(jFormattedTextField4);
+
+        jPanel1.add(jPanel4);
 
         add(jPanel1);
 
@@ -173,10 +212,20 @@ public class formPelatihan extends javax.swing.JPanel {
         int selectedCount = (int) Math.round(persen * datasetCount);
         System.out.println("Data Latih Terpilih= " + selectedCount);
 
-        List<Dataset> dataLatih = new LinkedList<>(pickNRandom(djp.findDatasetEntities(), selectedCount));
+        List<Dataset> dataLatih = null;
+        if (jComboBox3.getSelectedIndex() == 1) {
+            String fromText = jFormattedTextField5.getText();
+            String toText = jFormattedTextField4.getText();
+            int from = Integer.valueOf(fromText);
+            int to = Integer.valueOf(toText);
+            dataLatih = new LinkedList<>(djp.findDatasetEntities().subList(from, to));   
+        }
+        else {
+            dataLatih = new LinkedList<>(pickNRandom(djp.findDatasetEntities(), selectedCount));        
+        }
         
         
-        String namafile = "Data latih-"+" k = " + selectedK +"."+selectedItem;
+        String namafile = "Data latih-"+" Train = " + jComboBox3.getSelectedItem().toString() +"."+selectedItem;
         File file = new File(namafile);
         jFileChooser1.setSelectedFile(file);
         int retrival = jFileChooser1.showSaveDialog(null);
@@ -193,6 +242,7 @@ public class formPelatihan extends javax.swing.JPanel {
         if (jComboBox1.getSelectedIndex() == 0) {
             //KNN            
             System.out.println("KNN");
+            System.out.println("dataLatih = " + dataLatih.size());
             Map<String, Object> KNNtrainningTrain = new LinkedHashMap<>();
             KNNtrainningTrain.put("DATA LATIH", dataLatih);
             KNNtrainningTrain.put("K", selectedK);            
@@ -239,6 +289,7 @@ public class formPelatihan extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jFileChooser1.setFileFilter(new FileNameExtensionFilter("Train Files", "KNN", "NB", "C45"));
         int retrival = jFileChooser1.showOpenDialog(null);
         if (JFileChooser.CANCEL_OPTION == retrival) {
             return ;
@@ -264,6 +315,22 @@ public class formPelatihan extends javax.swing.JPanel {
         }
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jComboBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox3ItemStateChanged
+        if (jComboBox3.getSelectedIndex() == 1) 
+            {
+                jFormattedTextField4.setEnabled(true);
+                jFormattedTextField5.setEnabled(true);
+                jSlider1.setEnabled(true);
+            }
+        else
+            {
+                jSlider1.setEnabled(false);
+                jFormattedTextField4.setEnabled(false);
+                jFormattedTextField5.setEnabled(false);
+            }
+
+    }//GEN-LAST:event_jComboBox3ItemStateChanged
 
     public static void main(String[] args) {
         /* Set the Nimbus look and feel */
@@ -307,16 +374,22 @@ public class formPelatihan extends javax.swing.JPanel {
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JFileChooser jFileChooser1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JFormattedTextField jFormattedTextField3;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JFormattedTextField jFormattedTextField4;
+    private javax.swing.JFormattedTextField jFormattedTextField5;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSlider jSlider1;
     private javax.swing.JTextArea jTextArea1;

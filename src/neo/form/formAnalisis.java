@@ -25,6 +25,7 @@ import java.util.stream.IntStream;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import neo.table.Dataset;
 import neo.table.deskriptif;
 
@@ -47,6 +48,16 @@ public class formAnalisis extends javax.swing.JPanel {
 //             list1.add(stat);
 //             testData.forEach((v) -> stat.addValue(v));           
     }    
+
+    public JTable getjTable1() {
+        return jTable1;
+    }
+
+    public JTable getjTable2() {
+        return jTable2;
+    }
+    
+    
     public void tableFormat(List<Dataset> data)
     {
 //        initComponents();
@@ -62,7 +73,6 @@ public class formAnalisis extends javax.swing.JPanel {
                         Map<Double, Long> collect = beanList
                                 .stream()
                                 .collect( Collectors.groupingBy( d -> d, Collectors.counting()));
-                        System.out.println("collect = " + collect);
                         Double key = collect.entrySet().stream().max((entry1, entry2) -> entry1.getValue() > entry2.getValue() ? 1 : -1).get().getKey();
                         stat.setModeValue(key);
                 } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException ex) {
@@ -70,6 +80,9 @@ public class formAnalisis extends javax.swing.JPanel {
                 }
                 stat.setNameDesc(field.getName());
                 list1.add(stat);
+            }
+            
+            if (type.equals(String.class)) {
             }
        }            
     }
@@ -81,7 +94,6 @@ public class formAnalisis extends javax.swing.JPanel {
     
      private List<Double> getBeanList(String bean,List<Dataset> data) throws NoSuchFieldException, IllegalArgumentException, IllegalAccessException
      {
-         System.out.println("bean = " + bean);
           List<Double> value = new LinkedList<>();
           List<String> nope = new LinkedList<>();
 

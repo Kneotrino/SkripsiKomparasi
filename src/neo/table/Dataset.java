@@ -9,6 +9,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -83,9 +85,24 @@ public class Dataset implements Serializable {
     private Date time;
     
     
+    public Object getMeta(String key)
+    {
+        Map<String,Object> datasetMeta = new LinkedHashMap<>();
+        datasetMeta.put("workAccident;", workaccident);
+        datasetMeta.put("promotion;", promotion);        
+        datasetMeta.put("Division;", division);        
+        datasetMeta.put("Salary;", salary.toString());        
+        
+        datasetMeta.put("numberproject;", numberproject * 1d);        
+        datasetMeta.put("timespendcompany;", timespendcompany * 1d);        
+        datasetMeta.put("avaragehours;", avaragehours * 1d);        
 
+        datasetMeta.put("satisfaction;", satisfaction);        
+        datasetMeta.put("evaluation;", evaluation);        
+        return datasetMeta.get(key);    
+    }
     public Dataset() {
-        time = new Date();
+        time = new Date();        
     }
 
     @Transient
@@ -100,7 +117,22 @@ public class Dataset implements Serializable {
     public double getDistance() {
         return distance;
     }
-
+    public String getRelevancy()
+    {
+        if  ( ( getLeftsDouble() == 0d) && (getKelas() == 0d) ) {
+            return "TP";
+        }
+        if  ( ( getLeftsDouble() == 0d) && (getKelas() == 1d) ) {
+            return "FN";
+        }
+        if  ( ( getLeftsDouble() == 1d) && (getKelas() == 0d) ) {
+            return "FP";
+        }
+        if  ( ( getLeftsDouble()== 1d) && (getKelas()== 1d) ) {
+            return "TN";
+        }
+        return "null";
+    }
     /**
      * Set the value of distance
      *
@@ -113,7 +145,7 @@ public class Dataset implements Serializable {
     }
  
     @Transient    
-    private double kelas = 0;
+    private double kelas = -1;
 
     public static final String PROP_KELAS = "kelas";
 
