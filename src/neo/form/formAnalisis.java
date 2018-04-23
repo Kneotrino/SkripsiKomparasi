@@ -323,7 +323,7 @@ public class formAnalisis extends javax.swing.JPanel {
                     max = map.size();
             }
         }
-        System.out.println("max = " + max);
+//        System.out.println("max = " + max);
         String[] title = listString.stream().toArray(String[]::new);
 //        Object tableValue  = new Object[10][10];
         Object[][] dataTable = new Object[max+1][title.length];

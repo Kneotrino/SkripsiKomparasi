@@ -150,8 +150,8 @@ public class methodUtil {
             evaluationSTD.addValue(d.getEvaluation());
         });        
         
-        System.out.println("Division = " + Division);
-        System.out.println("Salary = " + Salary);
+//        System.out.println("Division = " + Division);
+//        System.out.println("Salary = " + Salary);
         
         naiveBayesPobabilitas workAccidentTrue = new naiveBayesPobabilitas("workAccident;True");
         naiveBayesPobabilitas workAccidentFalse = new naiveBayesPobabilitas("workAccident;False");

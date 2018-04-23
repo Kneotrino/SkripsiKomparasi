@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import javafx.stage.FileChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import neo.table.Dataset;
@@ -68,11 +69,14 @@ public class formKlasifikasi extends javax.swing.JPanel {
 
         listRelevancy = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(new LinkedList<>());
         listPeforma = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(new LinkedList<>());
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jFormattedTextField5 = new javax.swing.JFormattedTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jFormattedTextField4 = new javax.swing.JFormattedTextField();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -81,9 +85,29 @@ public class formKlasifikasi extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTableRelevancy = new javax.swing.JTable();
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+
+        jPanel3.setLayout(new java.awt.GridLayout());
+
+        jLabel7.setText("DARI");
+        jPanel3.add(jLabel7);
+
+        jFormattedTextField5.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField5.setText("100");
+        jFormattedTextField5.setMinimumSize(new java.awt.Dimension(50, 30));
+        jPanel3.add(jFormattedTextField5);
+
+        jLabel6.setText("SAMPAI");
+        jPanel3.add(jLabel6);
+
+        jFormattedTextField4.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField4.setText("200");
+        jFormattedTextField4.setMinimumSize(new java.awt.Dimension(50, 30));
+        jPanel3.add(jFormattedTextField4);
+
         setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.PAGE_AXIS));
 
-        jPanel1.setLayout(new java.awt.GridLayout(0, 2));
+        jPanel1.setLayout(new java.awt.GridLayout(0, 1));
 
         jButton1.setText("MULAI KLASIFIKASI");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -92,21 +116,6 @@ public class formKlasifikasi extends javax.swing.JPanel {
             }
         });
         jPanel1.add(jButton1);
-        jPanel1.add(jLabel1);
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("NILAI KNN K");
-        jPanel1.add(jLabel2);
-
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
-        jFormattedTextField1.setText("5");
-        jFormattedTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFormattedTextField1ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jFormattedTextField1);
 
         add(jPanel1);
 
@@ -124,6 +133,12 @@ public class formKlasifikasi extends javax.swing.JPanel {
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${info}"));
         columnBinding.setColumnName("Info");
         columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${trainingTime}"));
+        columnBinding.setColumnName("Training Time");
+        columnBinding.setColumnClass(Long.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${trainningMemory}"));
+        columnBinding.setColumnName("Trainning Memory");
+        columnBinding.setColumnClass(Long.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${classficationMemory}"));
         columnBinding.setColumnName("Classfication Memory");
         columnBinding.setColumnClass(Long.class);
@@ -225,8 +240,8 @@ public class formKlasifikasi extends javax.swing.JPanel {
     }
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        System.out.println("");
         long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-        System.out.println("Memory Usege before = " + beforeUsedMem);
         JFileChooser jfc = new JFileChooser();
         jfc.setFileFilter(new FileNameExtensionFilter("Train Files", "KNN", "NB", "C45"));
         int r = jfc.showOpenDialog(null);
@@ -238,21 +253,48 @@ public class formKlasifikasi extends javax.swing.JPanel {
         System.out.println("now = " + now);
         File selectedFile = jfc.getSelectedFile();
         String fileExtension = getFileExtension(selectedFile);
-        System.out.println("METODE = " + fileExtension);
-        System.out.println("fileExtension = " + fileExtension);
-        Integer K = Integer.valueOf(jFormattedTextField1.getText()) ;
+        System.out.println("METODE KELASIFIKASI= " + fileExtension);        
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
-        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(0, 120));        
+//        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(1000, 1100));        
+        List<Dataset> DataUji = null;        
         if (fileExtension.equals("KNN")) {
-            System.out.println("/nKNN");
+            JOptionPane.showConfirmDialog(null
+                    , jComboBox1
+                    , "MASUKAN NILAI KNN K = "
+                    , JOptionPane.OK_CANCEL_OPTION
+                    , JOptionPane.PLAIN_MESSAGE);
+            int K = jComboBox1.getSelectedIndex() + 1;
             System.out.println("K = " + K);
             Map<String, Object> deserialize;
             try {
                 deserialize = (Map<String, Object>) SerializationUtil.deserialize(selectedFile.getPath());
+                String metodePelatihan = (String) deserialize.get("TRAINNING");
+                int metodePelatihanKey = (int) deserialize.get("TRAINNINGKEY");
+                System.out.println("metodePelatihan = " + metodePelatihan);
                 List<Dataset> DataLatih = (List<Dataset>) deserialize.get("DATA LATIH");
-                DataUji.removeAll(DataLatih);
+                if (metodePelatihanKey == 1) {
+                        JOptionPane.showConfirmDialog(null
+                                , jPanel3
+                                , "MASUKAN NILAI SUPPLY TEST"
+                                , JOptionPane.OK_CANCEL_OPTION
+                                , JOptionPane.PLAIN_MESSAGE);                    
+                        String fromText = jFormattedTextField5.getText();
+                        String toText = jFormattedTextField4.getText();
+                        int from = Integer.valueOf(fromText);
+                        int to = Integer.valueOf(toText);
+                        DataUji = new LinkedList<>(findDatasetEntities.subList(from, to));
+                } else if (metodePelatihanKey == 0) {
+                        findDatasetEntities.removeAll(DataLatih);
+                        DataUji = findDatasetEntities;
+                        System.out.println("DataUji = " + DataUji.size());
+                } else {
+                }
                 List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, K);                
                 relevancy R = new relevancy("KNN k="+ K);
+                long trainMemory = (long) deserialize.get("MEMORY USE");
+                long trainTime = (long) deserialize.get("TIME USE");
+                p.setTrainingTime(trainTime);
+                p.setTrainningMemory(trainMemory);
                 p.setInfo("KNN k="+K);
                 R.setJumlahData(DataUji.size());
                 Map<String, Long> collectTrue = 
@@ -267,16 +309,13 @@ public class formKlasifikasi extends javax.swing.JPanel {
                 R.setTP(TP);
                 R.setTN(TN);
                 R.setFP(FP);
-                R.setFN(FN);
-                
-                
+                R.setFN(FN);                                
                 listRelevancy.add(R);
                 
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(formKlasifikasi.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        if (fileExtension.equals("NB")) {
+        } else if (fileExtension.equals("NB")) {
             
         }
 
@@ -285,21 +324,13 @@ public class formKlasifikasi extends javax.swing.JPanel {
 
         //akhir metode
         long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
-        System.out.println("Memory Usage After = " + afterUsedMem);
         Date end = new Date();
         System.out.println("end = " + end);
-        System.out.println("TIME(ms)  = " + (end.getTime() - now.getTime()) );
         p.setClassficationTime(end.getTime() - now.getTime());
         p.setClassficationMemory(afterUsedMem - beforeUsedMem);
-        System.out.println("Memory usege (byte) = " + p.getClassficationMemory());
         listPeforma.add(p);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
-
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     public static void main(String[] args) {
         /* Set the Nimbus look and feel */
@@ -341,11 +372,14 @@ public class formKlasifikasi extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JFormattedTextField jFormattedTextField4;
+    private javax.swing.JFormattedTextField jFormattedTextField5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

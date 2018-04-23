@@ -40,6 +40,46 @@ public class peforma implements Serializable{
         this.classficationMemory = classficationMemory;
     }
 
+    private long trainingTime;
+
+    private long trainningMemory;
+
+    /**
+     * Get the value of trainningMemory
+     *
+     * @return the value of trainningMemory
+     */
+    public long getTrainningMemory() {
+        return trainningMemory;
+    }
+
+    /**
+     * Set the value of trainningMemory
+     *
+     * @param trainningMemory new value of trainningMemory
+     */
+    public void setTrainningMemory(long trainningMemory) {
+        this.trainningMemory = trainningMemory;
+    }
+
+    /**
+     * Get the value of trainingTime
+     *
+     * @return the value of trainingTime
+     */
+    public long getTrainingTime() {
+        return trainingTime;
+    }
+
+    /**
+     * Set the value of trainingTime
+     *
+     * @param trainingTime new value of trainingTime
+     */
+    public void setTrainingTime(long trainingTime) {
+        this.trainingTime = trainingTime;
+    }
+
     private long classficationTime;
 
     /**

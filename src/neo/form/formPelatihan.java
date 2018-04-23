@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -63,16 +64,18 @@ public class formPelatihan extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jComboBox3 = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jFormattedTextField3 = new javax.swing.JFormattedTextField();
         jSlider1 = new javax.swing.JSlider();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBox4 = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jFormattedTextField5 = new javax.swing.JFormattedTextField();
@@ -105,6 +108,35 @@ public class formPelatihan extends javax.swing.JPanel {
         });
         jPanel1.add(jButton2);
 
+        jLabel3.setText("METODE");
+        jPanel1.add(jLabel3);
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KNN", "NB", "C4.5" }));
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(jComboBox1);
+
+        jLabel5.setText("METODE PENGUJIAN");
+        jPanel1.add(jLabel5);
+
+        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "USE TRAINNING", "SUPPLY TRAINNING", "CROSS VALIDATION" }));
+        jComboBox3.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox3ItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(jComboBox3);
+
+        jLabel4.setText("NB K LAPLACIAN SMOOTH");
+        jPanel1.add(jLabel4);
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        jComboBox2.setEnabled(false);
+        jPanel1.add(jComboBox2);
+
         jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
 
         jLabel2.setText("PRESENTASE DATA(MIN 0, MAX 100)");
@@ -125,33 +157,12 @@ public class formPelatihan extends javax.swing.JPanel {
         jSlider1.setValue(10);
         jPanel1.add(jSlider1);
 
-        jLabel3.setText("METODE");
-        jPanel1.add(jLabel3);
+        jLabel1.setText("JUMLAH PARTISI DATA");
+        jPanel1.add(jLabel1);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KNN", "NB", "C4.5" }));
-        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox1ItemStateChanged(evt);
-            }
-        });
-        jPanel1.add(jComboBox1);
-
-        jLabel4.setText("K");
-        jPanel1.add(jLabel4);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
-        jPanel1.add(jComboBox2);
-
-        jLabel5.setText("METODE PENGUJIAN");
-        jPanel1.add(jLabel5);
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "USE TRAINNING", "SUPPLY TEST", "CROSS VALIDATION" }));
-        jComboBox3.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox3ItemStateChanged(evt);
-            }
-        });
-        jPanel1.add(jComboBox3);
+        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "2", "3", "4", "5" }));
+        jComboBox4.setEnabled(false);
+        jPanel1.add(jComboBox4);
 
         jPanel5.setLayout(new javax.swing.BoxLayout(jPanel5, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -159,6 +170,7 @@ public class formPelatihan extends javax.swing.JPanel {
         jPanel5.add(jLabel7);
 
         jFormattedTextField5.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField5.setText("0");
         jFormattedTextField5.setEnabled(false);
         jFormattedTextField5.setMinimumSize(new java.awt.Dimension(50, 30));
         jPanel5.add(jFormattedTextField5);
@@ -171,6 +183,7 @@ public class formPelatihan extends javax.swing.JPanel {
         jPanel4.add(jLabel6);
 
         jFormattedTextField4.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        jFormattedTextField4.setText("100");
         jFormattedTextField4.setEnabled(false);
         jFormattedTextField4.setMinimumSize(new java.awt.Dimension(50, 30));
         jPanel4.add(jFormattedTextField4);
@@ -195,79 +208,99 @@ public class formPelatihan extends javax.swing.JPanel {
     PrintStream printStream;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         
-        System.out.println("\nMULAI");
+        System.out.println("\n\nMULAI");
         //
-        int value = jSlider1.getValue();
-        double persen = value * .01d;
-        int datasetCount = djp.getDatasetCount();
         String selectedItem = (String) jComboBox1.getSelectedItem();
-        System.out.println("Metode = " + selectedItem);
-        
-        int selectedK = jComboBox2.getSelectedIndex();
-        selectedK++;
-        System.out.println("K = " + selectedK);
-        
-        System.out.println("Total data = " + datasetCount);
-        System.out.println("Data Latih = " + persen);
-        int selectedCount = (int) Math.round(persen * datasetCount);
-        System.out.println("Data Latih Terpilih= " + selectedCount);
-
+        String selectedTrainning = (String) jComboBox3.getSelectedItem();
+        System.out.println("Metode Kelasifikasi = " + selectedItem);
+        System.out.println("selectedTrainning = " + selectedTrainning);
+                              
+        String namafile = "Data latih-"+" Train = " + selectedTrainning +"."+selectedItem;
+        File file = new File(namafile);
+        jFileChooser1.setSelectedFile(file);
+        int retrival = jFileChooser1.showSaveDialog(null);
+        if (retrival == JFileChooser.CANCEL_OPTION) {
+            System.out.println("BATAL LATIH");
+            return;
+        }
         List<Dataset> dataLatih = null;
-        if (jComboBox3.getSelectedIndex() == 1) {
+        Map<String, Object> MLOBJECT = new LinkedHashMap<>();
+        //pilihan mode pelatihan
+        if (jComboBox3.getSelectedIndex() == 0) {
+            //USE TRAINNING
+            int value = jSlider1.getValue();
+            double persen = value * .01d;
+            int datasetCount = djp.getDatasetCount();
+            System.out.println("Total data = " + datasetCount);
+            System.out.println("Data Latih = " + persen);
+            int selectedCount = (int) Math.round(persen * datasetCount);
+            System.out.println("Data Latih Terpilih= " + selectedCount);
+            dataLatih = new LinkedList<>(pickNRandom(djp.findDatasetEntities(), selectedCount));
+            MLOBJECT.put("TRAINNING", "USE TRAINNING");
+            MLOBJECT.put("TRAINNINGKEY", 0);
+        } else if (jComboBox3.getSelectedIndex() == 1) {
+            //SUPPLY
             String fromText = jFormattedTextField5.getText();
             String toText = jFormattedTextField4.getText();
             int from = Integer.valueOf(fromText);
             int to = Integer.valueOf(toText);
             dataLatih = new LinkedList<>(djp.findDatasetEntities().subList(from, to));   
+            MLOBJECT.put("TRAINNING", "SUPPLY TRAINNING");
+            MLOBJECT.put("TRAINNINGKEY", 1);
         }
-        else {
-            dataLatih = new LinkedList<>(pickNRandom(djp.findDatasetEntities(), selectedCount));        
+        else if (jComboBox3.getSelectedIndex() == 2) {
+            //CROSS VALIDATION
+            MLOBJECT.put("TRAINNING", "CROSS VALIDATION ");
+            MLOBJECT.put("TRAINNINGKEY", 2);
+            throw new NumberFormatException();
         }
         
-        
-        String namafile = "Data latih-"+" Train = " + jComboBox3.getSelectedItem().toString() +"."+selectedItem;
-        File file = new File(namafile);
-        jFileChooser1.setSelectedFile(file);
-        int retrival = jFileChooser1.showSaveDialog(null);
-        
-        System.out.println("retrival = " + retrival);
         
         file = jFileChooser1.getSelectedFile();
-        System.out.println("Save file = " + file);
-        
+        System.out.println("Save file = " + file);        
         if (JFileChooser.CANCEL_OPTION == retrival) {
             return ;
         }
             
+        long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+        Date start = new Date();
+        System.out.println("start = " + start);
+        System.out.println("beforeUsedMem = " + beforeUsedMem);
+        MLOBJECT.put("metode", selectedItem);
         if (jComboBox1.getSelectedIndex() == 0) {
             //KNN            
             System.out.println("KNN");
             System.out.println("dataLatih = " + dataLatih.size());
-            Map<String, Object> KNNtrainningTrain = new LinkedHashMap<>();
-            KNNtrainningTrain.put("DATA LATIH", dataLatih);
-            KNNtrainningTrain.put("K", selectedK);            
-            try {
-                SerializationUtil.serialize(KNNtrainningTrain, file.getPath());                
-            } catch (IOException ex) {
-                Logger.getLogger(formPelatihan.class.getName()).log(Level.SEVERE, null, ex);
-            }        
+            MLOBJECT.put("DATA LATIH", dataLatih);
         }
         if (jComboBox1.getSelectedIndex() == 1) {
+            int selectedK = jComboBox2.getSelectedIndex();
+            System.out.println("selectedK = " + selectedK);
+            selectedK++;
             System.out.println("NB");
-            Map<String, Object> NBtrainningTrain = new LinkedHashMap<>();
-            NBtrainningTrain.put("DATA LATIH", dataLatih);
-            NBtrainningTrain.put("NB TRAIN", methodUtil.NBtrain(dataLatih, selectedK));
-            NBtrainningTrain.put("K",selectedK);
-            try {
-                SerializationUtil.serialize(NBtrainningTrain, file.getPath());                
-            } catch (IOException ex) {
-                Logger.getLogger(formPelatihan.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            MLOBJECT.put("DATA LATIH", dataLatih);
+            MLOBJECT.put("NB TRAIN", methodUtil.NBtrain(dataLatih, selectedK));
+            MLOBJECT.put("K",selectedK);
             //NB            
         }
         if (jComboBox1.getSelectedIndex() == 2) {
             //C4.5            
         }
+
+        long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
+        Date end = new Date();
+        System.out.println("end = " + end);
+        System.out.println("afterUsedMem = " + afterUsedMem);
+        
+        MLOBJECT.put("MEMORY USE", afterUsedMem - beforeUsedMem);
+        MLOBJECT.put("TIME USE", end.getTime() - start.getTime());
+        try {
+            
+                SerializationUtil.serialize(MLOBJECT, file.getPath());                
+
+        } catch (IOException ex) {
+                Logger.getLogger(formPelatihan.class.getName()).log(Level.SEVERE, null, ex);
+            }
         System.out.println("SELESAI\n");
 
         // TODO add your handling code here:
@@ -280,10 +313,10 @@ public class formPelatihan extends javax.swing.JPanel {
         return copy.subList(0, n);
     }
     private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
-        if (jComboBox1.getSelectedIndex() == 2) 
-            jComboBox2.setEnabled(false);
+        if (jComboBox1.getSelectedIndex() == 1) 
+            jComboBox2.setEnabled(true);
         else
-            jComboBox2.setEnabled(true);        
+            jComboBox2.setEnabled(false);        
 
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ItemStateChanged
@@ -305,7 +338,7 @@ public class formPelatihan extends javax.swing.JPanel {
            EventQueue.invokeLater(() -> {
                JFrame frame = new JFrame("STATISTIK DATA LATIH "+ extension);
                frame.setContentPane(new formAnalisis(DataLatih));
-               frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+               frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                frame.pack();
                frame.setExtendedState(6);
                frame.setVisible(true);
@@ -321,11 +354,18 @@ public class formPelatihan extends javax.swing.JPanel {
             {
                 jFormattedTextField4.setEnabled(true);
                 jFormattedTextField5.setEnabled(true);
-                jSlider1.setEnabled(true);
-            }
-        else
-            {
+                jComboBox4.setEnabled(false);
                 jSlider1.setEnabled(false);
+            }
+        else if (jComboBox3.getSelectedIndex() == 2) {
+                jComboBox4.setEnabled(true);
+                jFormattedTextField4.setEnabled(false);
+                jFormattedTextField5.setEnabled(false);
+                jSlider1.setEnabled(false);
+        }
+        else   if (jComboBox3.getSelectedIndex() == 0)    {
+                jComboBox4.setEnabled(false);
+                jSlider1.setEnabled(true);
                 jFormattedTextField4.setEnabled(false);
                 jFormattedTextField5.setEnabled(false);
             }
@@ -375,10 +415,12 @@ public class formPelatihan extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JFormattedTextField jFormattedTextField3;
     private javax.swing.JFormattedTextField jFormattedTextField4;
     private javax.swing.JFormattedTextField jFormattedTextField5;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
