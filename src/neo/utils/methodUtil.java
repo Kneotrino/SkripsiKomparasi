@@ -121,7 +121,7 @@ public class methodUtil {
             }
 
             X.setKelas(pLeft > PNotLeft ? 1d:0d);
-            System.out.println("prediksi = " + X.getKelas() + "\tActual = "+ X.getLefts());
+//            System.out.println("prediksi = " + X.getKelas() + "\tActual = "+ X.getLefts());
         }
         return NBdataUji;
     }
@@ -265,6 +265,7 @@ public class methodUtil {
     {        
         System.out.println("dataLatih = " + dataLatih.size());
         System.out.println("dataUji = " + dataUji.size());
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "15");
         
         avaragehoursSTD = new deskriptif();
         timespendcompanySTD = new deskriptif();
@@ -278,31 +279,40 @@ public class methodUtil {
         });
         
         
-        for (Dataset d : dataUji) {
+        dataUji
+//                .parallelStream()
+                .stream()
+                .forEach((d) -> {
             //Hitung jarak d ke semua himpunan datalatih
-            for (Dataset x : dataLatih) {
-                x.setDistance(euclideanFunction(d, x));
-            }
-            
+            int indexOf = dataUji.indexOf(d);            
+            System.err.println("indexOf = " + indexOf +"/"+dataUji.size());
+            dataLatih
+                    .parallelStream()
+//                    .stream()
+                    .forEach((x) -> {
+            //KNN FILTER
+//            if (x.getDivision().equals(d.getDivision()))
+                    x.setDistance(euclideanFunction(d, x));                    
+                
+            });
             //Temukan k tetanga terdekat terdeket
             //Sort
-                dataLatih.sort((o2, o1) -> Double.compare(o2.getDistance(), o1.getDistance()));
-                //Pilihan k terdekat
-                List<Dataset> nearest = new LinkedList<>(dataLatih.subList(0, k));
-                //vote
-                double sumKelas = 0;
-                sumKelas = nearest
-                        .stream()
-                        .map((dataset) -> 
-                                dataset.getLeftsDouble()).reduce(sumKelas, 
-                                        (accumulator, _item) -> accumulator + _item);
-                double half = k/2d;
-                if (sumKelas > half) 
-                    d.setKelas(1d);
-                else
-                    d.setKelas(0d);
-
-        }
+            dataLatih.sort((o2, o1) -> Double.compare(o2.getDistance(), o1.getDistance()));
+            //Pilihan k terdekat
+            List<Dataset> nearest = new LinkedList<>(dataLatih.subList(0, k));
+            //vote
+            double sumKelas = 0;
+            sumKelas = nearest
+                    .stream()
+                    .map((dataset) ->
+                            dataset.getLeftsDouble()).reduce(sumKelas,
+                                    (accumulator, _item) -> accumulator + _item);
+            double half = k/2d;
+            if (sumKelas > half)
+                d.setKelas(1d);
+            else
+                d.setKelas(0d);
+        });
         return dataUji;
     }
     

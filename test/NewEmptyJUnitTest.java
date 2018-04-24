@@ -61,13 +61,13 @@ public class NewEmptyJUnitTest {
         System.out.println("DataUJI = " + DataUJI.size());
         System.out.println("DataLatih = " + DataLatih.size());
         List<naiveBayesPobabilitas> NBtrain = methodUtil.NBtrain(DataLatih, 2);        
+        methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUJI);
 //         for (naiveBayesPobabilitas bp : NBtrain) {
 //             System.out.println("bp = " + bp);
 //         }
 //         
 
 
-        methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUJI);
 
         Double actualLeft = 0d;
         Double prediksiLeft = 0d;
@@ -110,14 +110,14 @@ public class NewEmptyJUnitTest {
      public void testKNN() {
         DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
-        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 100));
+        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 10000));
         Double sumLatihLeft = 0d;
          System.out.println("1");
          for (Dataset dataset : DataLatih) {
              sumLatihLeft += dataset.getLeftsDouble();
          }
          System.out.println("2");
-        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(100, 130));
+        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(10000, 11000));
         Double sumUjiLeft = 0d;
          for (Dataset dataset : DataUji) {
              sumUjiLeft += dataset.getLeftsDouble();

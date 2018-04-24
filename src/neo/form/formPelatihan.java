@@ -47,7 +47,7 @@ public class formPelatihan extends javax.swing.JPanel {
     public void refresh()
     {
         System.setOut(printStream);
-        System.setErr(printStream);
+//        System.setErr(printStream);
     }
 
     /**
@@ -275,7 +275,6 @@ public class formPelatihan extends javax.swing.JPanel {
         }
         if (jComboBox1.getSelectedIndex() == 1) {
             int selectedK = jComboBox2.getSelectedIndex();
-            System.out.println("selectedK = " + selectedK);
             selectedK++;
             System.out.println("NB");
             MLOBJECT.put("DATA LATIH", dataLatih);

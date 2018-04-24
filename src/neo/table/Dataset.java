@@ -101,12 +101,28 @@ public class Dataset implements Serializable {
         datasetMeta.put("evaluation;", evaluation);        
         return datasetMeta.get(key);    
     }
+    public Map<String,Double> getMetaDouble()
+    {
+        Map<String,Double> datasetMeta = new LinkedHashMap<>();
+//        datasetMeta.put("workAccident;", workaccident);
+//        datasetMeta.put("promotion;", promotion);        
+//        datasetMeta.put("Division;", division);        
+//        datasetMeta.put("Salary;", salary.toString());        
+        
+        datasetMeta.put("numberproject;", numberproject * 1d);        
+        datasetMeta.put("timespendcompany;", timespendcompany * 1d);        
+        datasetMeta.put("avaragehours;", avaragehours * 1d);        
+
+//        datasetMeta.put("satisfaction;", satisfaction);        
+//        datasetMeta.put("evaluation;", evaluation);        
+        return datasetMeta;    
+    }
     public Dataset() {
         time = new Date();        
     }
 
     @Transient
-    private double distance = 0;
+    private double distance = 9d;
     public static final String PROP_DISTANCE = "distance";
 
     /**

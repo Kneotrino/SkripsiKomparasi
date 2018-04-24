@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import neo.table.Dataset;
+import neo.table.naiveBayesPobabilitas;
 import neo.table.peforma;
 import neo.table.relevancy;
 import neo.utils.DatasetJpaController;
@@ -48,14 +49,14 @@ public class formKlasifikasi extends javax.swing.JPanel {
         djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         printStream = new PrintStream(new consoleStream(jTextArea1));
         System.setOut(printStream);
-        System.setErr(printStream);
+//        System.setErr(printStream);
     }
     public void refresh()
     {
         int datasetCount = djp.getDatasetCount();
 //        jFormattedTextField1.setValue(datasetCount);
         System.setOut(printStream);
-        System.setErr(printStream);
+//        System.setErr(printStream);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -244,6 +245,9 @@ public class formKlasifikasi extends javax.swing.JPanel {
         long beforeUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
         JFileChooser jfc = new JFileChooser();
         jfc.setFileFilter(new FileNameExtensionFilter("Train Files", "KNN", "NB", "C45"));
+        jfc.addChoosableFileFilter(new FileNameExtensionFilter("Train NB Files", "NB"));
+        jfc.addChoosableFileFilter(new FileNameExtensionFilter("Train KNN Files", "KNN"));
+        jfc.addChoosableFileFilter(new FileNameExtensionFilter("Train C45 Files", "C45"));
         int r = jfc.showOpenDialog(null);
         if (r == JFileChooser.CANCEL_OPTION) {
             return;
@@ -252,6 +256,7 @@ public class formKlasifikasi extends javax.swing.JPanel {
         Date now = new Date();
         System.out.println("now = " + now);
         File selectedFile = jfc.getSelectedFile();
+        System.out.println("selectedFile = " + selectedFile);
         String fileExtension = getFileExtension(selectedFile);
         System.out.println("METODE KELASIFIKASI= " + fileExtension);        
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
@@ -273,11 +278,14 @@ public class formKlasifikasi extends javax.swing.JPanel {
                 System.out.println("metodePelatihan = " + metodePelatihan);
                 List<Dataset> DataLatih = (List<Dataset>) deserialize.get("DATA LATIH");
                 if (metodePelatihanKey == 1) {
-                        JOptionPane.showConfirmDialog(null
-                                , jPanel3
-                                , "MASUKAN NILAI SUPPLY TEST"
-                                , JOptionPane.OK_CANCEL_OPTION
-                                , JOptionPane.PLAIN_MESSAGE);                    
+                        int showConfirmDialog = JOptionPane.showConfirmDialog(null
+                            , jPanel3
+                            , "MASUKAN NILAI SUPPLY TEST"
+                            , JOptionPane.OK_CANCEL_OPTION
+                            , JOptionPane.PLAIN_MESSAGE);                    
+                        if (showConfirmDialog == JOptionPane.CANCEL_OPTION) {
+                            return ;
+                        }
                         String fromText = jFormattedTextField5.getText();
                         String toText = jFormattedTextField4.getText();
                         int from = Integer.valueOf(fromText);
@@ -316,7 +324,62 @@ public class formKlasifikasi extends javax.swing.JPanel {
                 Logger.getLogger(formKlasifikasi.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else if (fileExtension.equals("NB")) {
-            
+            Map<String, Object> deserialize;
+            try {
+                deserialize = (Map<String, Object>) SerializationUtil.deserialize(selectedFile.getPath());
+                String metodePelatihan = (String) deserialize.get("TRAINNING");
+                int metodePelatihanKey = (int) deserialize.get("TRAINNINGKEY");
+                System.out.println("metodePelatihan = " + metodePelatihan);
+                List<Dataset> DataLatih = (List<Dataset>) deserialize.get("DATA LATIH");
+                if (metodePelatihanKey == 1) {
+                        int showConfirmDialog = JOptionPane.showConfirmDialog(null
+                            , jPanel3
+                            , "MASUKAN NILAI SUPPLY TEST"
+                            , JOptionPane.OK_CANCEL_OPTION
+                            , JOptionPane.PLAIN_MESSAGE);                    
+                        if (showConfirmDialog == JOptionPane.CANCEL_OPTION) {
+                            return ;
+                        }
+
+                        String fromText = jFormattedTextField5.getText();
+                        String toText = jFormattedTextField4.getText();
+                        int from = Integer.valueOf(fromText);
+                        int to = Integer.valueOf(toText);
+                        DataUji = new LinkedList<>(findDatasetEntities.subList(from, to));
+                } else if (metodePelatihanKey == 0) {
+                        findDatasetEntities.removeAll(DataLatih);
+                        DataUji = findDatasetEntities;
+                        System.out.println("DataUji = " + DataUji.size());
+                } else {
+                }                
+                List<naiveBayesPobabilitas> NBtrain = (List<naiveBayesPobabilitas>) deserialize.get("NB TRAIN");
+                methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUji);
+                int K = (int) deserialize.get("K");
+                relevancy R = new relevancy("NB K="+ K);
+                long trainMemory = (long) deserialize.get("MEMORY USE");
+                long trainTime = (long) deserialize.get("TIME USE");
+                p.setTrainingTime(trainTime);
+                p.setTrainningMemory(trainMemory);
+                p.setInfo("NB K="+K);
+                R.setJumlahData(DataUji.size());
+                Map<String, Long> collectTrue = 
+                        DataUji
+                                .stream()
+                                .collect(Collectors.groupingBy( (Dataset e) -> e.getRelevancy(), Collectors.counting()));   
+                System.out.println("collectTrue = " + collectTrue);
+                double TP = collectTrue.get("TP") != null? collectTrue.get("TP"):0d;
+                double TN = collectTrue.get("TN") != null? collectTrue.get("TN"):0d;
+                double FP = collectTrue.get("FP") != null? collectTrue.get("FP"):0d;
+                double FN = collectTrue.get("FN") != null? collectTrue.get("FN"):0d;
+                R.setTP(TP);
+                R.setTN(TN);
+                R.setFP(FP);
+                R.setFN(FN);                                
+                listRelevancy.add(R);
+                
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(formKlasifikasi.class.getName()).log(Level.SEVERE, null, ex);
+            }            
         }
 
 
