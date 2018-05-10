@@ -8,6 +8,7 @@ package neo.table;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -85,22 +86,44 @@ public class Dataset implements Serializable {
     private Date time;
     
     
+    public Object getMetaClass(String key,Object key2)
+    {
+        Object meta = getMeta(key);
+        
+        return key+";"+key2.toString()+";"+lefts;
+    }
     public Object getMeta(String key)
     {
         Map<String,Object> datasetMeta = new LinkedHashMap<>();
         datasetMeta.put("workAccident;", workaccident);
+        datasetMeta.put("workAccident", workaccident);
         datasetMeta.put("promotion;", promotion);        
+        datasetMeta.put("promotion", promotion);        
         datasetMeta.put("Division;", division);        
+        datasetMeta.put("Division", division);        
         datasetMeta.put("Salary;", salary.toString());        
+        datasetMeta.put("Salary", salary.toString());        
         
         datasetMeta.put("numberproject;", numberproject * 1d);        
+        datasetMeta.put("numberproject", numberproject * 1d);        
         datasetMeta.put("timespendcompany;", timespendcompany * 1d);        
+        datasetMeta.put("timespendcompany", timespendcompany * 1d);        
         datasetMeta.put("avaragehours;", avaragehours * 1d);        
+        datasetMeta.put("avaragehours", avaragehours * 1d);        
 
         datasetMeta.put("satisfaction;", satisfaction);        
-        datasetMeta.put("evaluation;", evaluation);        
+        datasetMeta.put("satisfaction", satisfaction);        
+        datasetMeta.put("evaluation;", evaluation);  
+        datasetMeta.put("evaluation", evaluation);  
+
+//        DecimalFormat df = new DecimalFormat("#.0"); 
+//        datasetMeta.put("evaluation", df.format(evaluation));  
+        
+        datasetMeta.put("lefts", lefts);        
         return datasetMeta.get(key);    
     }
+    
+    
     public Map<String,Double> getMetaDouble()
     {
         Map<String,Double> datasetMeta = new LinkedHashMap<>();

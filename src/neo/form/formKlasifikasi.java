@@ -250,7 +250,7 @@ public class formKlasifikasi extends javax.swing.JPanel {
         jfc.addChoosableFileFilter(new FileNameExtensionFilter("Train C45 Files", "C45"));
         int r = jfc.showOpenDialog(null);
         if (r == JFileChooser.CANCEL_OPTION) {
-            return;
+                batal(new UnsupportedOperationException("Not supported yet."));
         }
         peforma p = new peforma();
         Date now = new Date();
@@ -263,11 +263,15 @@ public class formKlasifikasi extends javax.swing.JPanel {
 //        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(1000, 1100));        
         List<Dataset> DataUji = null;        
         if (fileExtension.equals("KNN")) {
-            JOptionPane.showConfirmDialog(null
+            int reply = JOptionPane.showConfirmDialog(null
                     , jComboBox1
                     , "MASUKAN NILAI KNN K = "
                     , JOptionPane.OK_CANCEL_OPTION
                     , JOptionPane.PLAIN_MESSAGE);
+            System.out.println("reply = " + reply);
+            if (reply == JOptionPane.CANCEL_OPTION) {
+                batal(new UnsupportedOperationException("Not supported yet."));
+            }
             int K = jComboBox1.getSelectedIndex() + 1;
             System.out.println("K = " + K);
             Map<String, Object> deserialize;
@@ -278,13 +282,13 @@ public class formKlasifikasi extends javax.swing.JPanel {
                 System.out.println("metodePelatihan = " + metodePelatihan);
                 List<Dataset> DataLatih = (List<Dataset>) deserialize.get("DATA LATIH");
                 if (metodePelatihanKey == 1) {
-                        int showConfirmDialog = JOptionPane.showConfirmDialog(null
+                        int jawab = JOptionPane.showConfirmDialog(null
                             , jPanel3
                             , "MASUKAN NILAI SUPPLY TEST"
                             , JOptionPane.OK_CANCEL_OPTION
                             , JOptionPane.PLAIN_MESSAGE);                    
-                        if (showConfirmDialog == JOptionPane.CANCEL_OPTION) {
-                            return ;
+                        if (jawab == JOptionPane.CANCEL_OPTION) {
+                            batal(new UnsupportedOperationException("Not supported yet."));
                         }
                         String fromText = jFormattedTextField5.getText();
                         String toText = jFormattedTextField4.getText();
@@ -338,7 +342,7 @@ public class formKlasifikasi extends javax.swing.JPanel {
                             , JOptionPane.OK_CANCEL_OPTION
                             , JOptionPane.PLAIN_MESSAGE);                    
                         if (showConfirmDialog == JOptionPane.CANCEL_OPTION) {
-                            return ;
+                            batal(new UnsupportedOperationException("Not supported yet."));
                         }
 
                         String fromText = jFormattedTextField5.getText();
@@ -453,4 +457,9 @@ public class formKlasifikasi extends javax.swing.JPanel {
     private java.util.List<neo.table.relevancy> listRelevancy;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
+    private void batal(UnsupportedOperationException unsupportedOperationException) {
+        JOptionPane.showMessageDialog(null, "Pembatalan Proese Klasifikasi");
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

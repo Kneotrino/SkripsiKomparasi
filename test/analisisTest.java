@@ -69,7 +69,7 @@ public class analisisTest {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-//     @Test
+     @Test
      public void hello() {
         System.out.println("analisisTest.hello()");
         EntityManager entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU").createEntityManager();

@@ -37,8 +37,6 @@ public class methodUtil {
             List<Dataset> NBdataLatih,
             List<Dataset> NBdataUji)
     {
-        double pLeft = 1d;
-        double PNotLeft = 1d;
         
         
         avaragehoursSTD = new deskriptif();
@@ -90,9 +88,15 @@ public class methodUtil {
                         Collectors.groupingBy((naiveBayesPobabilitas e)-> {return e.getAtribut();}, 
                         Collectors.summingDouble((naiveBayesPobabilitas a) -> a.getProbabilitasNotLeft())
                 ));        
-        
+        double pLeft;
+        double PNotLeft;
+
         for (Dataset X : NBdataUji) {
+//            int indexOf = NBdataUji.indexOf(X);            
+//            System.err.println("indexOf = " + indexOf +"/"+NBdataUji.size());
             
+            pLeft = 1d;
+            PNotLeft = 1d;
             for (String string : meta) {
                 String key = string;
                 Object m = X.getMeta(string);
@@ -100,7 +104,6 @@ public class methodUtil {
                     Integer temp = (Integer) m;
                     key += temp == 1 ? "True":"False";
                 }
-
                 else if (m.getClass() == String.class) {
                     String temp = (String) m;
                     key += temp;
@@ -109,7 +112,6 @@ public class methodUtil {
                     Double temp = (Double) m;
                     key += temp > meanMap.get(key).getMean() ? "True":"False"; 
                 }
-
                 if (collectLeft.get(key) != null) {
                     pLeft = pLeft * collectLeft.get(key);
                     PNotLeft = PNotLeft * collecNotLeft.get(key);
@@ -117,9 +119,7 @@ public class methodUtil {
                     pLeft = pLeft * collectLeft.get("Division;null");
                     PNotLeft = PNotLeft * collecNotLeft.get("Division;null");                
                 }
-
             }
-
             X.setKelas(pLeft > PNotLeft ? 1d:0d);
 //            System.out.println("prediksi = " + X.getKelas() + "\tActual = "+ X.getLefts());
         }
@@ -265,14 +265,14 @@ public class methodUtil {
     {        
         System.out.println("dataLatih = " + dataLatih.size());
         System.out.println("dataUji = " + dataUji.size());
-        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "15");
+        System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "20");
         
         avaragehoursSTD = new deskriptif();
         timespendcompanySTD = new deskriptif();
         numberprojectSTD = new deskriptif();
         
         //Data statistik data latih
-        dataLatih.stream().forEachOrdered((d) -> {
+        dataLatih.stream().forEach((d) -> {
             avaragehoursSTD.addValue(d.getAvaragehours());
             timespendcompanySTD.addValue(d.getTimespendcompany());
             numberprojectSTD.addValue(d.getNumberproject());

@@ -52,7 +52,7 @@ public class NewEmptyJUnitTest {
     //
     
     //
-//     @Test
+     @Test
      public void NB(){
         DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
@@ -106,7 +106,7 @@ public class NewEmptyJUnitTest {
          System.out.println("y = " + y);
 
      }    
-     @Test
+//     @Test
      public void testKNN() {
         DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
@@ -117,7 +117,7 @@ public class NewEmptyJUnitTest {
              sumLatihLeft += dataset.getLeftsDouble();
          }
          System.out.println("2");
-        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(10000, 11000));
+        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(10000, 10010));
         Double sumUjiLeft = 0d;
          for (Dataset dataset : DataUji) {
              sumUjiLeft += dataset.getLeftsDouble();
