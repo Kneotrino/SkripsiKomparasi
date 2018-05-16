@@ -26,6 +26,7 @@ import neo.table.Dataset;
 import neo.table.naiveBayesPobabilitas;
 import neo.table.peforma;
 import neo.table.relevancy;
+import neo.utils.C45;
 import neo.utils.DatasetJpaController;
 import neo.utils.SerializationUtil;
 import neo.utils.consoleStream;
@@ -88,7 +89,7 @@ public class formKlasifikasi extends javax.swing.JPanel {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
 
-        jPanel3.setLayout(new java.awt.GridLayout());
+        jPanel3.setLayout(new java.awt.GridLayout(1, 0));
 
         jLabel7.setText("DARI");
         jPanel3.add(jLabel7);
@@ -160,8 +161,11 @@ public class formKlasifikasi extends javax.swing.JPanel {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${info}"));
         columnBinding.setColumnName("Info");
         columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${jumlahDataLatih}"));
+        columnBinding.setColumnName("N LATIH");
+        columnBinding.setColumnClass(Double.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${jumlahData}"));
-        columnBinding.setColumnName("Jumlah Data");
+        columnBinding.setColumnName("N TEST");
         columnBinding.setColumnClass(Double.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${TP}"));
         columnBinding.setColumnName("TP");
@@ -309,6 +313,7 @@ public class formKlasifikasi extends javax.swing.JPanel {
                 p.setTrainningMemory(trainMemory);
                 p.setInfo("KNN k="+K);
                 R.setJumlahData(DataUji.size());
+                R.setJumlahDataLatih(DataLatih.size());
                 Map<String, Long> collectTrue = 
                         DataUji
                                 .stream()
@@ -360,6 +365,7 @@ public class formKlasifikasi extends javax.swing.JPanel {
                 methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUji);
                 int K = (int) deserialize.get("K");
                 relevancy R = new relevancy("NB K="+ K);
+                R.setJumlahDataLatih(DataLatih.size());
                 long trainMemory = (long) deserialize.get("MEMORY USE");
                 long trainTime = (long) deserialize.get("TIME USE");
                 p.setTrainingTime(trainTime);
@@ -384,6 +390,66 @@ public class formKlasifikasi extends javax.swing.JPanel {
             } catch (IOException | ClassNotFoundException ex) {
                 Logger.getLogger(formKlasifikasi.class.getName()).log(Level.SEVERE, null, ex);
             }            
+        }
+        else if (fileExtension.equals("C45")) {
+            Map<String, Object> deserialize;
+            try {
+                deserialize = (Map<String, Object>) SerializationUtil.deserialize(selectedFile.getPath());
+                String metodePelatihan = (String) deserialize.get("TRAINNING");
+                int metodePelatihanKey = (int) deserialize.get("TRAINNINGKEY");
+                System.out.println("metodePelatihan = " + metodePelatihan);
+                List<Dataset> DataLatih = (List<Dataset>) deserialize.get("DATA LATIH");
+                if (metodePelatihanKey == 1) {
+                        int showConfirmDialog = JOptionPane.showConfirmDialog(null
+                            , jPanel3
+                            , "MASUKAN NILAI SUPPLY TEST"
+                            , JOptionPane.OK_CANCEL_OPTION
+                            , JOptionPane.PLAIN_MESSAGE);                    
+                        if (showConfirmDialog == JOptionPane.CANCEL_OPTION) {
+                            batal(new UnsupportedOperationException("Not supported yet."));
+                        }
+
+                        String fromText = jFormattedTextField5.getText();
+                        String toText = jFormattedTextField4.getText();
+                        int from = Integer.valueOf(fromText);
+                        int to = Integer.valueOf(toText);
+                        DataUji = new LinkedList<>(findDatasetEntities.subList(from, to));
+                } else if (metodePelatihanKey == 0) {
+                        findDatasetEntities.removeAll(DataLatih);
+                        DataUji = findDatasetEntities;
+                        System.out.println("DataUji = " + DataUji.size());
+                } else {
+                }                
+                C45 C45train = (C45) deserialize.get("TREE");
+                methodUtil.C45testing(C45train, DataUji);
+                relevancy R = new relevancy("C45");
+                R.setJumlahDataLatih(DataLatih.size());
+                long trainMemory = (long) deserialize.get("MEMORY USE");
+                long trainTime = (long) deserialize.get("TIME USE");
+                p.setTrainingTime(trainTime);
+                p.setTrainningMemory(trainMemory);
+                p.setInfo("C45");
+                R.setJumlahData(DataUji.size());
+                Map<String, Long> collectTrue = 
+                        DataUji
+                                .stream()
+                                .collect(Collectors.groupingBy( (Dataset e) -> e.getRelevancy(), Collectors.counting()));   
+                System.out.println("collectTrue = " + collectTrue);
+                double TP = collectTrue.get("TP") != null? collectTrue.get("TP"):0d;
+                double TN = collectTrue.get("TN") != null? collectTrue.get("TN"):0d;
+                double FP = collectTrue.get("FP") != null? collectTrue.get("FP"):0d;
+                double FN = collectTrue.get("FN") != null? collectTrue.get("FN"):0d;
+                R.setTP(TP);
+                R.setTN(TN);
+                R.setFP(FP);
+                R.setFN(FN);                                
+                listRelevancy.add(R);
+                
+            } catch (IOException | ClassNotFoundException ex) {
+                Logger.getLogger(formKlasifikasi.class.getName()).log(Level.SEVERE, null, ex);
+            }            
+        
+        
         }
 
 

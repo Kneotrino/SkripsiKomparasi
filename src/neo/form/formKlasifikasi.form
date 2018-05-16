@@ -322,6 +322,16 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
               </TableColumnModel>
             </Property>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
@@ -331,69 +341,95 @@
           <BindingProperties>
             <BindingProperty name="elements" source="listRelevancy" target="jTableRelevancy" targetPath="elements" updateStrategy="0" immediately="true">
               <Subbinding sourcePath="${info}">
+                <BindingParameter name="NAME" value="Info"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="String.class"/>
               </Subbinding>
+              <Subbinding sourcePath="${jumlahDataLatih}">
+                <BindingParameter name="NAME" value="N LATIH"/>
+                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
+              </Subbinding>
               <Subbinding sourcePath="${jumlahData}">
+                <BindingParameter name="NAME" value="N TEST"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${TP}">
+                <BindingParameter name="NAME" value="TP"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${TN}">
+                <BindingParameter name="NAME" value="TN"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${FP}">
+                <BindingParameter name="NAME" value="FP"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${FN}">
+                <BindingParameter name="NAME" value="FN"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${PRE}">
+                <BindingParameter name="NAME" value="PRE"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${TPR}">
+                <BindingParameter name="NAME" value="TPR"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${TNR}">
+                <BindingParameter name="NAME" value="TNR"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${PPV}">
+                <BindingParameter name="NAME" value="PPV"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${NPV}">
+                <BindingParameter name="NAME" value="NPV"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${FNR}">
+                <BindingParameter name="NAME" value="FNR"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${FPR}">
+                <BindingParameter name="NAME" value="FPR"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${FDR}">
+                <BindingParameter name="NAME" value="FDR"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${FOR}">
+                <BindingParameter name="NAME" value="FOR"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${ACC}">
+                <BindingParameter name="NAME" value="ACC"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${f1}">
+                <BindingParameter name="NAME" value="F1"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${MCC}">
+                <BindingParameter name="NAME" value="MCC"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${BM}">
+                <BindingParameter name="NAME" value="BM"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${DOR}">
+                <BindingParameter name="NAME" value="DOR"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${LRplus}">
+                <BindingParameter name="NAME" value="LRplus"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
               <Subbinding sourcePath="${LRminus}">
+                <BindingParameter name="NAME" value="LRminus"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
             </BindingProperty>

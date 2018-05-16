@@ -12,10 +12,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import neo.table.Dataset;
 import neo.table.deskriptif;
 import neo.table.naiveBayesPobabilitas;
+import weka.core.Attribute;
+import weka.core.FastVector;
+import weka.core.Instance;
+import weka.core.Instances;
 
 /**
  *
@@ -30,6 +37,7 @@ public class methodUtil {
     
     static deskriptif satisfactionSTD;
     static deskriptif evaluationSTD;
+    
     
 
     public static List<Dataset> NBclasificationAll(
@@ -315,7 +323,127 @@ public class methodUtil {
         });
         return dataUji;
     }
+    public static Attribute createAttribute(List<Dataset> Data,String key)
+     {
+        Function<Dataset, String> funcTemp = (Dataset a) -> (String) a.getMeta(key);         
+        Map<String, Long> fun = Data
+                .stream()
+                .collect(Collectors.groupingBy(
+                                     funcTemp , Collectors.counting()
+                            ));
+        
+        Set<String> keySet = fun.keySet();
+        FastVector fvNominalVal = new FastVector(keySet.size());
+         for (String string : keySet) {
+            fvNominalVal.addElement(string);             
+         }
+        return new Attribute(key, fvNominalVal);
+     }
+    public static  Instances createInstances(List<Dataset> Data)
+     {
+        int max = 10;
+        FastVector listAttributes = new FastVector(max);
+        listAttributes.addElement(new Attribute("satisfaction"));
+        listAttributes.addElement(new Attribute("evaluation"));
+        listAttributes.addElement(new Attribute("numberproject"));                
+        listAttributes.addElement(new Attribute("avaragehours"));                
+        listAttributes.addElement(new Attribute("timespendcompany"));                
+        listAttributes.addElement(new Attribute("workAccident"));                
+        listAttributes.addElement(new Attribute("promotion"));                
+        listAttributes.addElement(new Attribute("salary"));                
+        listAttributes.addElement(createAttribute(Data, "division"));
+        listAttributes.addElement(createAttribute(Data, "leftsString"));
+
+        
+        
+        Instances temp = new Instances("data", listAttributes, Data.size());
+        temp.setClassIndex(max-1);        
+         for (Dataset dataset : Data) {
+            Instance x = new Instance(max);
+            for (int i = 0; i < 10; i++) {
+                 Attribute elementAt = (Attribute) listAttributes.elementAt(i);
+                 Object meta = dataset.getMeta(elementAt.name()); 
+                 if (meta instanceof Integer) {
+                     int v = (int) meta;
+                     double value = v*1d;                     
+                     x.setValue(elementAt, value);
+                 }
+                 else if (meta instanceof Double) {                                 
+                     x.setValue(elementAt, (double) meta);
+                 }                 
+                 else if (meta instanceof String) {                                 
+                     x.setValue(elementAt, (String) meta);
+                 }
+                 
+             }
+//            System.out.println("x = " + x);     
+            temp.add(x);
+         }
+         return temp;
+     }
+    public static C45 C45train(List<Dataset> dataLatih)
+    {
+        C45 tree = new C45();
+        Instances tranning = createInstances(dataLatih);
+        try {
+            tree.buildClassifier(tranning);
+        } catch (Exception ex) {
+            Logger.getLogger(methodUtil.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return tree;
+    }
     
+    public static List<Dataset> C45testing(C45 tree, List<Dataset> Data)
+    {
+        FastVector listAttributes = new FastVector(10);
+        listAttributes.addElement(new Attribute("satisfaction"));
+        listAttributes.addElement(new Attribute("evaluation"));
+        listAttributes.addElement(new Attribute("numberproject"));                
+        listAttributes.addElement(new Attribute("avaragehours"));                
+        listAttributes.addElement(new Attribute("timespendcompany"));                
+        listAttributes.addElement(new Attribute("workAccident"));                
+        listAttributes.addElement(new Attribute("promotion"));                
+        listAttributes.addElement(new Attribute("salary"));                
+        listAttributes.addElement(createAttribute(Data, "division"));
+        listAttributes.addElement(createAttribute(Data, "leftsString"));
+
+        for (Dataset dataset : Data) {
+            Instance singleInstance = singleInstance(listAttributes, dataset);
+            double classifyInstance = 0;
+            try {
+                classifyInstance = tree.classifyInstance(singleInstance);
+                dataset.setKelas(classifyInstance);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        return Data;        
+    }
+     public static Instance singleInstance(FastVector listAttributes, Dataset data)
+     {
+         Instance single = new Instance(10);
+         Instances dataUnlabeled = new Instances("TestInstances", listAttributes, 0);
+         dataUnlabeled.add(single);
+         dataUnlabeled.setClassIndex(dataUnlabeled.numAttributes() - 1);     
+         single.setDataset(dataUnlabeled);
+         for (int i = 0; i < 10; i++) {
+                Attribute elementAt = (Attribute) listAttributes.elementAt(i);
+                Object meta = data.getMeta(elementAt.name());              
+                 if (meta instanceof Integer) {
+                     int v = (int) meta;
+                     double value = v*1d;                     
+                     single.setValue(i, value);
+                 }
+                 else if (meta instanceof Double) {                                 
+                     single.setValue(i, (double) meta);
+                 }                 
+                 else if (meta instanceof String) {                                 
+                     single.setValue(i, (String) meta);
+                 }
+         }
+//         System.out.println("single = " + single);
+         return single;
+     }    
     public static double euclideanFunction(Dataset y, Dataset x)
     {               
         //Kontinus var

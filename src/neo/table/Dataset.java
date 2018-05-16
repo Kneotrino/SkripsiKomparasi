@@ -88,8 +88,7 @@ public class Dataset implements Serializable {
     
     public Object getMetaClass(String key,Object key2)
     {
-        Object meta = getMeta(key);
-        
+        Object meta = getMeta(key);        
         return key+";"+key2.toString()+";"+lefts;
     }
     public Object getMeta(String key)
@@ -100,9 +99,10 @@ public class Dataset implements Serializable {
         datasetMeta.put("promotion;", promotion);        
         datasetMeta.put("promotion", promotion);        
         datasetMeta.put("Division;", division);        
-        datasetMeta.put("Division", division);        
+        datasetMeta.put("division", division);        
         datasetMeta.put("Salary;", salary.toString());        
-        datasetMeta.put("Salary", salary.toString());        
+        datasetMeta.put("SalaryString", salary.toString());        
+        datasetMeta.put("salary", salary);        
         
         datasetMeta.put("numberproject;", numberproject * 1d);        
         datasetMeta.put("numberproject", numberproject * 1d);        
@@ -120,6 +120,7 @@ public class Dataset implements Serializable {
 //        datasetMeta.put("evaluation", df.format(evaluation));  
         
         datasetMeta.put("lefts", lefts);        
+        datasetMeta.put("leftsString", lefts==0?"left":"stay");        
         return datasetMeta.get(key);    
     }
     

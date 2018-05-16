@@ -296,7 +296,9 @@ public class formAnalisis extends javax.swing.JPanel {
             ListFun.add(funcTemp);
             funcTemp = (Dataset a) -> "8.Division:"+a.getDivision();
             ListFun.add(funcTemp);
-            funcTemp = (Dataset a) -> "9.Left:"+a.getLefts();
+            funcTemp = (Dataset a) -> "9.Salary:"+a.getSalary();
+            ListFun.add(funcTemp);
+            funcTemp = (Dataset a) -> "10.Left:"+a.getLefts();
             ListFun.add(funcTemp);
             int m = 0;
             for (Function function : ListFun) {

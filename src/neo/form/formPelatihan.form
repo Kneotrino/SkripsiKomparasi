@@ -60,7 +60,7 @@
               <StringArray count="3">
                 <StringItem index="0" value="KNN"/>
                 <StringItem index="1" value="NB"/>
-                <StringItem index="2" value="C4.5"/>
+                <StringItem index="2" value="C45"/>
               </StringArray>
             </Property>
           </Properties>

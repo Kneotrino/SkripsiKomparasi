@@ -5,6 +5,8 @@
  */
 package neo.table;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 /**
@@ -27,6 +29,51 @@ public class relevancy implements Serializable{
     private double jumlahData;
 
     private String info;
+    
+    private double jumlahDataLatih;
+
+    public static final String PROP_JUMLAHDATALATIH = "jumlahDataLatih";
+
+    /**
+     * Get the value of jumlahDataLatih
+     *
+     * @return the value of jumlahDataLatih
+     */
+    public double getJumlahDataLatih() {
+        return jumlahDataLatih;
+    }
+
+    /**
+     * Set the value of jumlahDataLatih
+     *
+     * @param jumlahDataLatih new value of jumlahDataLatih
+     */
+    public void setJumlahDataLatih(double jumlahDataLatih) {
+        double oldJumlahDataLatih = this.jumlahDataLatih;
+        this.jumlahDataLatih = jumlahDataLatih;
+        propertyChangeSupport.firePropertyChange(PROP_JUMLAHDATALATIH, oldJumlahDataLatih, jumlahDataLatih);
+    }
+
+    private transient final PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+
+    /**
+     * Add PropertyChangeListener.
+     *
+     * @param listener
+     */
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.addPropertyChangeListener(listener);
+    }
+
+    /**
+     * Remove PropertyChangeListener.
+     *
+     * @param listener
+     */
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        propertyChangeSupport.removePropertyChangeListener(listener);
+    }
+
 
     public relevancy(String info) {
         this.info = info;

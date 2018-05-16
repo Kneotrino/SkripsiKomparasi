@@ -21,6 +21,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import neo.table.Dataset;
+import neo.utils.C45;
 import neo.utils.DatasetJpaController;
 import neo.utils.SerializationUtil;
 import neo.utils.consoleStream;
@@ -111,7 +112,7 @@ public class formPelatihan extends javax.swing.JPanel {
         jLabel3.setText("METODE");
         jPanel1.add(jLabel3);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KNN", "NB", "C4.5" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "KNN", "NB", "C45" }));
         jComboBox1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jComboBox1ItemStateChanged(evt);
@@ -270,7 +271,6 @@ public class formPelatihan extends javax.swing.JPanel {
         if (jComboBox1.getSelectedIndex() == 0) {
             //KNN            
             System.out.println("KNN");
-            System.out.println("dataLatih = " + dataLatih.size());
             MLOBJECT.put("DATA LATIH", dataLatih);
         }
         if (jComboBox1.getSelectedIndex() == 1) {
@@ -283,7 +283,11 @@ public class formPelatihan extends javax.swing.JPanel {
             //NB            
         }
         if (jComboBox1.getSelectedIndex() == 2) {
-            //C4.5            
+            //C4.5
+            System.out.println("C45");
+            MLOBJECT.put("DATA LATIH", dataLatih);
+            C45 C45train = methodUtil.C45train(dataLatih);
+            MLOBJECT.put("TREE", C45train);                        
         }
 
         long afterUsedMem=Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
