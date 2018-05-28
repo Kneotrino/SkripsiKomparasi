@@ -94,21 +94,6 @@
                   <Editor/>
                   <Renderer/>
                 </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
               </TableColumnModel>
             </Property>
             <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
@@ -157,20 +142,8 @@
                 <BindingParameter name="NAME" value="Sum"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
-              <Subbinding sourcePath="${variance}">
-                <BindingParameter name="NAME" value="Variance"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
-              </Subbinding>
               <Subbinding sourcePath="${standardDeviation}">
                 <BindingParameter name="NAME" value="Standard Deviation"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
-              </Subbinding>
-              <Subbinding sourcePath="${skewness}">
-                <BindingParameter name="NAME" value="Skewness"/>
-                <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
-              </Subbinding>
-              <Subbinding sourcePath="${quadraticMean}">
-                <BindingParameter name="NAME" value="Quadratic Mean"/>
                 <BindingParameter name="javax.swing.binding.ParameterKeys.COLUMN_CLASS" value="Double.class"/>
               </Subbinding>
             </BindingProperty>

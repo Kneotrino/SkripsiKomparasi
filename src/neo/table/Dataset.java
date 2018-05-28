@@ -147,7 +147,7 @@ public class Dataset implements Serializable {
 
     @Transient
     private double distance = 9d;
-    public static final String PROP_DISTANCE = "distance";
+//    public static final String PROP_DISTANCE = "distance";
 
     /**
      * Get the value of distance
@@ -181,13 +181,13 @@ public class Dataset implements Serializable {
     public void setDistance(double distance) {
         double oldDistance = this.distance;
         this.distance = distance;
-        changeSupport.firePropertyChange(PROP_DISTANCE, oldDistance, distance);
+        changeSupport.firePropertyChange("distance", oldDistance, distance);
     }
  
     @Transient    
     private double kelas = -1;
 
-    public static final String PROP_KELAS = "kelas";
+//    public static final String PROP_KELAS = "kelas";
 
     /**
      * Get the value of kelas
@@ -206,7 +206,7 @@ public class Dataset implements Serializable {
     public void setKelas(double kelas) {
         double oldKelas = this.kelas;
         this.kelas = kelas;
-        changeSupport.firePropertyChange(PROP_KELAS, oldKelas, kelas);
+        changeSupport.firePropertyChange("kelas", oldKelas, kelas);
     }
 
 

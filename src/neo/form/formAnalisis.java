@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.Function;
@@ -82,7 +83,28 @@ public class formAnalisis extends javax.swing.JPanel {
                 list1.add(stat);
             }
             
-            if (type.equals(String.class)) {
+            if (type.equals(String.class)) {                
+                deskriptif stat = new deskriptif();
+                Set<String> collect = data
+                        .stream()
+                        .collect(Collectors.mapping((Dataset a) -> (String) a.getMeta(field.getName()), Collectors.toSet())
+                        );                
+                System.out.println("collect = " + collect);
+                Map<String,Double> mapping = new LinkedHashMap<>();
+                Double x = 0d;
+                 for (String string : collect) {
+                     x++;
+                     mapping.put(string, x);             
+                 }
+                 List<Double> beanList = new LinkedList<>();
+                 for (Dataset dataset : data) {
+                    beanList.add( mapping.getOrDefault(dataset.getMeta(field.getName()), x) );
+                }
+                 beanList.forEach(stat::addValue);
+                
+                
+                stat.setNameDesc(field.getName());
+                list1.add(stat);
             }
        }            
     }
@@ -161,17 +183,8 @@ public class formAnalisis extends javax.swing.JPanel {
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${sum}"));
         columnBinding.setColumnName("Sum");
         columnBinding.setColumnClass(Double.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${variance}"));
-        columnBinding.setColumnName("Variance");
-        columnBinding.setColumnClass(Double.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${standardDeviation}"));
         columnBinding.setColumnName("Standard Deviation");
-        columnBinding.setColumnClass(Double.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${skewness}"));
-        columnBinding.setColumnName("Skewness");
-        columnBinding.setColumnClass(Double.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${quadraticMean}"));
-        columnBinding.setColumnName("Quadratic Mean");
         columnBinding.setColumnClass(Double.class);
         bindingGroup.addBinding(jTableBinding);
         jTableBinding.bind();

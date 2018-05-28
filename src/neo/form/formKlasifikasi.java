@@ -28,6 +28,7 @@ import neo.table.peforma;
 import neo.table.relevancy;
 import neo.utils.C45;
 import neo.utils.DatasetJpaController;
+import neo.utils.KNN;
 import neo.utils.SerializationUtil;
 import neo.utils.consoleStream;
 import neo.utils.methodUtil;
@@ -303,9 +304,20 @@ public class formKlasifikasi extends javax.swing.JPanel {
                         findDatasetEntities.removeAll(DataLatih);
                         DataUji = findDatasetEntities;
                         System.out.println("DataUji = " + DataUji.size());
-                } else {
+                } else if (metodePelatihanKey == 2) {
+                    //Cross Validation
+                        findDatasetEntities.removeAll(DataLatih);
+                        DataUji = findDatasetEntities;
+                        System.out.println("DataUji = " + DataUji.size());
+                } 
+                KNN KNNtrain = null;
+                try {
+                    KNNtrain = methodUtil.KNNtrain(DataLatih, K);
+                } catch (Exception ex) {
+                    Logger.getLogger(formKlasifikasi.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, K);                
+                methodUtil.ClassifierTesting(KNNtrain, DataUji);                
+//                List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, K);                
                 relevancy R = new relevancy("KNN k="+ K);
                 long trainMemory = (long) deserialize.get("MEMORY USE");
                 long trainTime = (long) deserialize.get("TIME USE");
@@ -359,7 +371,11 @@ public class formKlasifikasi extends javax.swing.JPanel {
                         findDatasetEntities.removeAll(DataLatih);
                         DataUji = findDatasetEntities;
                         System.out.println("DataUji = " + DataUji.size());
-                } else {
+                } else if (metodePelatihanKey == 2) {
+                    //Cross Validation
+                        findDatasetEntities.removeAll(DataLatih);
+                        DataUji = findDatasetEntities;
+                        System.out.println("DataUji = " + DataUji.size());
                 }                
                 List<naiveBayesPobabilitas> NBtrain = (List<naiveBayesPobabilitas>) deserialize.get("NB TRAIN");
                 methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUji);
@@ -418,10 +434,14 @@ public class formKlasifikasi extends javax.swing.JPanel {
                         findDatasetEntities.removeAll(DataLatih);
                         DataUji = findDatasetEntities;
                         System.out.println("DataUji = " + DataUji.size());
-                } else {
-                }                
+                } else if (metodePelatihanKey == 2) {
+                    //Cross Validation
+                        findDatasetEntities.removeAll(DataLatih);
+                        DataUji = findDatasetEntities;
+                        System.out.println("DataUji = " + DataUji.size());
+                }             
                 C45 C45train = (C45) deserialize.get("TREE");
-                methodUtil.C45testing(C45train, DataUji);
+                methodUtil.ClassifierTesting(C45train, DataUji);
                 relevancy R = new relevancy("C45");
                 R.setJumlahDataLatih(DataLatih.size());
                 long trainMemory = (long) deserialize.get("MEMORY USE");

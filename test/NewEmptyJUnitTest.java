@@ -8,6 +8,8 @@ import com.opencsv.CSVReader;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import java.io.FileReader;
+import java.util.Enumeration;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +24,11 @@ import neo.utils.C45;
 import neo.utils.DatasetJpaController;
 import neo.utils.methodUtil;
 import org.junit.Test;
+import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.bayes.NaiveBayesMultinomial;
+import weka.classifiers.lazy.IBk;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -144,7 +150,9 @@ public class NewEmptyJUnitTest {
          }
          return temp;
      }
-     @Test
+     
+     
+//     @Test
      public void C45(){
         DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
@@ -153,30 +161,19 @@ public class NewEmptyJUnitTest {
          
                  
          try {
-             
-            C45 tree = new C45();
+            Classifier ibk = new IBk(10);	
+//            ibk.set
+//            C45 tree = new C45();
             Instances tranning = createInstances(DataLatih);
-            tree.buildClassifier(tranning);
+            ibk.buildClassifier(tranning);
+//            tree.buildClassifier(tranning);
             Instances testing = createInstances(DataUJI);
             Evaluation eTest = new Evaluation(tranning);
-            eTest.evaluateModel(tree, testing);
+            eTest.evaluateModel(ibk, testing);
             double errorRate = eTest.errorRate();
             System.out.println("errorRate = " + errorRate);
             double correct = eTest.correct();
             System.out.println("correct = " + correct);
-            //
-            testingC45(tree,DataUJI);
-            int size = DataUJI.size();
-             System.out.println("size = " + size);
-            Double actualLeft = 0d;
-            Double prediksiLeft = 0d;
-            for (Dataset dataset : DataUJI) {
-                 actualLeft += dataset.getLeftsDouble();
-                 prediksiLeft += dataset.getKelas();
-            }
-             System.out.println("prediksiLeft = " + prediksiLeft);
-             System.out.println("actualLeft = " + actualLeft);
-                    
          } catch (Exception ex) {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
          }
@@ -185,31 +182,31 @@ public class NewEmptyJUnitTest {
     //
 
 //     @Test
-     public void NB(){
-        DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
-        List<Dataset> findDatasetEntities = djp.findDatasetEntities();
-        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 12000));
-        List<Dataset> DataUJI = new LinkedList<>(findDatasetEntities.subList(0, 4000));
-        System.out.println("DataUJI = " + DataUJI.size());
-        System.out.println("DataLatih = " + DataLatih.size());
-        List<naiveBayesPobabilitas> NBtrain = methodUtil.NBtrain(DataLatih, 2);        
-        methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUJI);
-//         for (naiveBayesPobabilitas bp : NBtrain) {
-//             System.out.println("bp = " + bp);
-//         }
-//         
-
-
-
-        Double actualLeft = 0d;
-        Double prediksiLeft = 0d;
-        for (Dataset dataset : DataUJI) {
-             actualLeft += dataset.getLeftsDouble();
-             prediksiLeft += dataset.getKelas();
-        }
-         System.out.println("prediksiLeft = " + prediksiLeft);
-         System.out.println("actualLeft = " + actualLeft);
-     }
+//     public void NB(){
+//        DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
+//        List<Dataset> findDatasetEntities = djp.findDatasetEntities();
+//        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 10000));
+//        List<Dataset> DataUJI = new LinkedList<>(findDatasetEntities.subList(10000, 14000));
+//        System.out.println("DataUJI = " + DataUJI.size());
+//        System.out.println("DataLatih = " + DataLatih.size());
+//        List<naiveBayesPobabilitas> NBtrain = methodUtil.NBtrain(DataLatih, 2);        
+//        methodUtil.NBclasificationAll(NBtrain, DataLatih, DataUJI);
+////         for (naiveBayesPobabilitas bp : NBtrain) {
+////             System.out.println("bp = " + bp);
+////         }
+////         
+//
+//
+//
+//        Double actualLeft = 0d;
+//        Double prediksiLeft = 0d;
+//        for (Dataset dataset : DataUJI) {
+//             actualLeft += dataset.getLeftsDouble();
+//             prediksiLeft += dataset.getKelas();
+//        }
+//         System.out.println("prediksiLeft = " + prediksiLeft);
+//         System.out.println("actualLeft = " + actualLeft);
+//     }
 //     @Test
      public void hello() {
          System.out.println("NewEmptyJUnitTest.hello()");
@@ -227,29 +224,38 @@ public class NewEmptyJUnitTest {
             Logger.getLogger(NewEmptyJUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         }
      }
-//     @Test
+     @Test
      public void math() {
-         double  x  = 120;
-         double mean = 110;
-         double max = 100;
-         double min = 150;
-         
-         double y = (x - mean) / (max - min);
-         System.out.println("y = " + y);
-
+        DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
+        List<Dataset> Data = djp.findDatasetEntities();
+        System.out.println("NewEmptyJUnitTest.math()");
+//        Attribute createAttribute = createAttribute(Data, "division");
+        Function<Dataset, String> funcTemp = (Dataset a) -> (String) a.getMeta("division");         
+        Set<String> collect = Data
+                .stream()
+                .collect(Collectors.mapping(Dataset::getDivision, Collectors.toSet())
+                );
+        System.out.println("collect = " + collect);
+        Map<String,Double> mapping = new LinkedHashMap<>();
+        Double x = 0d;
+         for (String string : collect) {
+             x++;
+             mapping.put(string, x);             
+         }
+         System.out.println("mapping = " + mapping);
      }    
 //     @Test
      public void testKNN() {
         DatasetJpaController djp = new DatasetJpaController(javax.persistence.Persistence.createEntityManagerFactory("analisiKomparasiPU"));
         List<Dataset> findDatasetEntities = djp.findDatasetEntities();
-        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 10000));
+        List<Dataset> DataLatih = new LinkedList<>(findDatasetEntities.subList(0, 1000));
         Double sumLatihLeft = 0d;
          System.out.println("1");
          for (Dataset dataset : DataLatih) {
              sumLatihLeft += dataset.getLeftsDouble();
          }
          System.out.println("2");
-        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(10000, 10010));
+        List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(10000, 11000));
         Double sumUjiLeft = 0d;
          for (Dataset dataset : DataUji) {
              sumUjiLeft += dataset.getLeftsDouble();
@@ -257,7 +263,15 @@ public class NewEmptyJUnitTest {
          System.out.println("3");
         
         List<Dataset> KNN = methodUtil.KNN(DataLatih, DataUji, 1);
-        System.out.println("KNN = " + KNN.size());
+        Double actualLeft = 0d;
+        Double prediksiLeft = 0d;
+        for (Dataset dataset : KNN) {
+             actualLeft += dataset.getLeftsDouble();
+             prediksiLeft += dataset.getKelas();
+        }
+         System.out.println("prediksiLeft = " + prediksiLeft);
+         System.out.println("actualLeft = " + actualLeft);       
+         System.out.println("KNN = " + KNN.size());
      }
 
     private void testingC45(C45 tree, List<Dataset> Data) {

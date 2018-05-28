@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import neo.table.Dataset;
 import neo.table.deskriptif;
 import neo.table.naiveBayesPobabilitas;
+import weka.classifiers.Classifier;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -133,7 +134,7 @@ public class methodUtil {
         }
         return NBdataUji;
     }
-    public static List<naiveBayesPobabilitas> NBtrain(List<Dataset> dataLatih,int k)
+    public static List<naiveBayesPobabilitas> NBtraining(List<Dataset> dataLatih,int k)
     {        
         List<naiveBayesPobabilitas> tempTrain = new LinkedList<>();
         System.out.println("Laplace Smoothing K = " + k);
@@ -293,7 +294,7 @@ public class methodUtil {
                 .forEach((d) -> {
             //Hitung jarak d ke semua himpunan datalatih
             int indexOf = dataUji.indexOf(d);            
-            System.err.println("indexOf = " + indexOf +"/"+dataUji.size());
+//            System.err.println("indexOf = " + indexOf +"/"+dataUji.size());
             dataLatih
                     .parallelStream()
 //                    .stream()
@@ -381,19 +382,30 @@ public class methodUtil {
          }
          return temp;
      }
-    public static C45 C45train(List<Dataset> dataLatih)
+    public static C45 C45train(List<Dataset> dataLatih) throws Exception
     {
         C45 tree = new C45();
         Instances tranning = createInstances(dataLatih);
-        try {
-            tree.buildClassifier(tranning);
-        } catch (Exception ex) {
-            Logger.getLogger(methodUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }        
+        tree.buildClassifier(tranning);
         return tree;
     }
+    public static KNN KNNtrain(List<Dataset> dataLatih, int k) throws Exception
+    {
+        KNN knn = new KNN(k);
+        Instances tranning = createInstances(dataLatih);
+        knn.buildClassifier(tranning);
+        return knn;
+    }
+    public static NB NBtrain(List<Dataset> dataLatih) throws Exception
+    {
+        NB nb = new NB();
+        Instances tranning = createInstances(dataLatih);
+        nb.buildClassifier(tranning);
+        return nb;
+    }
     
-    public static List<Dataset> C45testing(C45 tree, List<Dataset> Data)
+    
+    public static List<Dataset> ClassifierTesting(Classifier clf, List<Dataset> Data)
     {
         FastVector listAttributes = new FastVector(10);
         listAttributes.addElement(new Attribute("satisfaction"));
@@ -411,7 +423,7 @@ public class methodUtil {
             Instance singleInstance = singleInstance(listAttributes, dataset);
             double classifyInstance = 0;
             try {
-                classifyInstance = tree.classifyInstance(singleInstance);
+                classifyInstance = clf.classifyInstance(singleInstance);
                 dataset.setKelas(classifyInstance);
             } catch (Exception ex) {
                 ex.printStackTrace();
