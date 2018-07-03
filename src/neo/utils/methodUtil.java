@@ -100,10 +100,7 @@ public class methodUtil {
         double pLeft;
         double PNotLeft;
 
-        for (Dataset X : NBdataUji) {
-//            int indexOf = NBdataUji.indexOf(X);            
-//            System.err.println("indexOf = " + indexOf +"/"+NBdataUji.size());
-            
+        for (Dataset X : NBdataUji) {            
             pLeft = 1d;
             PNotLeft = 1d;
             for (String string : meta) {
@@ -130,7 +127,6 @@ public class methodUtil {
                 }
             }
             X.setKelas(pLeft > PNotLeft ? 1d:0d);
-//            System.out.println("prediksi = " + X.getKelas() + "\tActual = "+ X.getLefts());
         }
         return NBdataUji;
     }
@@ -289,20 +285,13 @@ public class methodUtil {
         
         
         dataUji
-//                .parallelStream()
-                .stream()
+                .parallelStream()
                 .forEach((d) -> {
             //Hitung jarak d ke semua himpunan datalatih
-            int indexOf = dataUji.indexOf(d);            
-//            System.err.println("indexOf = " + indexOf +"/"+dataUji.size());
             dataLatih
                     .parallelStream()
-//                    .stream()
                     .forEach((x) -> {
-            //KNN FILTER
-//            if (x.getDivision().equals(d.getDivision()))
-                    x.setDistance(euclideanFunction(d, x));                    
-                
+                    x.setDistance(euclideanFunction(d, x));                                    
             });
             //Temukan k tetanga terdekat terdeket
             //Sort
@@ -389,6 +378,7 @@ public class methodUtil {
         tree.buildClassifier(tranning);
         return tree;
     }
+    
     public static KNN KNNtrain(List<Dataset> dataLatih, int k) throws Exception
     {
         KNN knn = new KNN(k);
@@ -396,16 +386,17 @@ public class methodUtil {
         knn.buildClassifier(tranning);
         return knn;
     }
-    public static NB NBtrain(List<Dataset> dataLatih) throws Exception
+    public static NB NBtrain(List<Dataset> dataLatih, int k) throws Exception
     {
         NB nb = new NB();
         Instances tranning = createInstances(dataLatih);
+        nb.setKonstanta(k);
         nb.buildClassifier(tranning);
         return nb;
     }
     
     
-    public static List<Dataset> ClassifierTesting(Classifier clf, List<Dataset> Data)
+    public static List<Dataset> ClassifierTesting(Classifier tree, List<Dataset> Data)
     {
         FastVector listAttributes = new FastVector(10);
         listAttributes.addElement(new Attribute("satisfaction"));
@@ -423,7 +414,7 @@ public class methodUtil {
             Instance singleInstance = singleInstance(listAttributes, dataset);
             double classifyInstance = 0;
             try {
-                classifyInstance = clf.classifyInstance(singleInstance);
+                classifyInstance = tree.classifyInstance(singleInstance);
                 dataset.setKelas(classifyInstance);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -520,7 +511,11 @@ public class methodUtil {
             }            
         }
     }
-    private static void counterNaiveBayes(naiveBayesPobabilitas NBPTrue, naiveBayesPobabilitas NBPFalse, Boolean value, Integer DataClass) {
+    private static void counterNaiveBayes(
+            naiveBayesPobabilitas NBPTrue, 
+            naiveBayesPobabilitas NBPFalse, 
+            Boolean value, 
+            Integer DataClass) {
             if (value) {
                 NBPTrue.addCount();
                 if (DataClass == 1) {

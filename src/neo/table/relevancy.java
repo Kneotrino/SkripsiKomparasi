@@ -142,7 +142,6 @@ public class relevancy implements Serializable{
     public double getFN() {
         return FN;
     }
-
     public double getPRE()
     {
         return (getTP() + getFP()) / getJumlahData();
@@ -211,10 +210,8 @@ public class relevancy implements Serializable{
     public double  getMCC()
     {
         double akar = (TP+FP)*(TP+FN)*(TN+FP)*(TN+FN);
-        akar = Math.sqrt(akar);
-        
+        akar = Math.sqrt(akar);        
         return ((TP*TN)-(FP*FN))/(akar);
-//        return akar;
     }
     
     

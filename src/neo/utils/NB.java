@@ -13,4 +13,24 @@ import weka.classifiers.bayes.NaiveBayes;
  */
 public class NB extends NaiveBayes {
     
+    private int konstanta;
+
+    /**
+     * Get the value of konstanta
+     *
+     * @return the value of konstanta
+     */
+    public int getKonstanta() {
+        return konstanta;
+    }
+
+    /**
+     * Set the value of konstanta
+     *
+     * @param konstanta new value of konstanta
+     */
+    public void setKonstanta(int konstanta) {
+        this.konstanta = konstanta;
+    }
+
 }

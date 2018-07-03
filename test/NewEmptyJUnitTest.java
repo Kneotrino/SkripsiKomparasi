@@ -29,6 +29,7 @@ import weka.classifiers.Evaluation;
 import weka.classifiers.bayes.NaiveBayes;
 import weka.classifiers.bayes.NaiveBayesMultinomial;
 import weka.classifiers.lazy.IBk;
+import weka.classifiers.trees.J48;
 import weka.core.Attribute;
 import weka.core.FastVector;
 import weka.core.Instance;
@@ -161,7 +162,7 @@ public class NewEmptyJUnitTest {
          
                  
          try {
-            Classifier ibk = new IBk(10);	
+            Classifier ibk = new J48();	
 //            ibk.set
 //            C45 tree = new C45();
             Instances tranning = createInstances(DataLatih);

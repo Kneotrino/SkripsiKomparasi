@@ -47,33 +47,35 @@ public class c45 {
         List<Dataset> DataUji = new LinkedList<>(findDatasetEntities.subList(110, 120));
 //        makan();
         //count root
+        
         List<gain> rootGain = createGain("lefts", DataLatih);
         List<String> metaCandidate = new LinkedList<>();
+        List<branchCandidate> candidates = createBranchCandidate(
+                metaCandidate,
+                DataLatih, 
+                totalEntropy(rootGain));         
+        branchSetGain(candidates);
         
-        metaCandidate.add("workAccident");
-        metaCandidate.add("Salary");                
-        metaCandidate.add("Division");
+//        metaCandidate.add("workAccident");
+//        metaCandidate.add("Salary");                
+//        metaCandidate.add("Division");
 //        metaCandidate.add("evaluation");
     
 //         for (gain g : rootGain) {
 //             System.out.println("g {" + g+"}");
 //         }         
 
-         List<branchCandidate> candidates = createBranchCandidate(metaCandidate,DataLatih, totalEntropy(rootGain));         
-         branchSetGain(candidates);
-//         for (branchCandidate candidate : candidates) {
-//             System.out.println("candidate {" + candidate+"}");
-//         }
 
          branchCandidate selectMax = selectMax(candidates);
          String newKey = selectMax.getCabang();
          divideList(newKey, DataLatih);
-         //2
-         metaCandidate.remove(newKey);
-         
+         metaCandidate.remove(newKey);         
          
          List<gain> rootNewGain = createGain(newKey, DataLatih);
-         List<branchCandidate> newCandidates = createBranchCandidate(metaCandidate,DataLatih, totalEntropy(rootGain));         
+         List<branchCandidate> newCandidates = createBranchCandidate(
+                 metaCandidate,
+                 DataLatih, 
+                 totalEntropy(rootGain));         
          branchSetGain(newCandidates);
 //         for (branchCandidate candidate : candidates) {
 //             System.out.println("candidate {" + candidate+"}");
@@ -170,7 +172,10 @@ public class c45 {
         
     }
 
-    private List<branchCandidate> createBranchCandidate(List<String> metaCandidate, List<Dataset> DataLatih, double totalEntropy) {
+    private List<branchCandidate> createBranchCandidate(
+            List<String> metaCandidate, 
+            List<Dataset> DataLatih, 
+            double totalEntropy) {
 //        System.out.println("totalEntropy = " + totalEntropy);
         List<branchCandidate> candidates = new LinkedList<>();
         for (String string : metaCandidate) {
